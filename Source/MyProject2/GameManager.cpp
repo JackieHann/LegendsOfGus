@@ -5,8 +5,6 @@
 
 UGameManager::UGameManager(const FObjectInitializer& ObjectInitializer)
 {
-	//_levelManager = NewObject<LevelManager>();
-	//_sceneManager = NewObject<SceneManager>();
 	_managerID = this->GetUniqueID();
 }
 

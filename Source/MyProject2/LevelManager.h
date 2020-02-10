@@ -16,5 +16,13 @@ public:
 
 	void LM_DoSomething();
 
+	void CreateLevel(const int seed);
+
 	void SpawnBlueprintActor(const char* file_path, FVector world_pos, FRotator world_rot);
+
+
+private:
+	//Functions used by the CreateLevel Function Only
+	void _CreateLevel(const int seed);
+
 };

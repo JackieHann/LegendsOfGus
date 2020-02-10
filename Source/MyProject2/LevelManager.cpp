@@ -39,3 +39,15 @@ void LevelManager::SpawnBlueprintActor(const char* file_path, FVector world_pos,
 	UWorld* World = GWorld;
 	World->SpawnActor<AActor>(GeneratedBP->GeneratedClass, world_pos, world_rot);
 }
+
+void LevelManager::CreateLevel(const int seed)
+{
+	this->_CreateLevel(seed);
+}
+
+void LevelManager::_CreateLevel(const int seed)
+{
+	//function that creates and stores the level, generated via the seed.
+
+
+}
