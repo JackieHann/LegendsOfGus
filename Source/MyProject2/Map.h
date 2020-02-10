@@ -50,14 +50,14 @@ struct Map
 	{
 		srand(seed);
 
-		while (m_rooms.size() < 10)
+		while (m_rooms.size() < 25)
 		{
 			m_rooms.clear();
 			m_corridors.clear();
 
-			AddRoomFromRoomData(start_room_5x5_1door, { (MAP_DIMENSIONS_X / 2) - 2, (MAP_DIMENSIONS_Y / 2) - 2 });
+			AddRoomFromRoomData(start_room_5x5_1door, { (MAP_DIMENSIONS_X/2)-2, (MAP_DIMENSIONS_Y / 2) - 2 });
 
-			for (int i = 0; i < 20; i++)
+			for (int i = 0; i < 100; i++)
 				AddRoomsToDoor();
 		}
 	}
@@ -87,7 +87,7 @@ struct Map
 					//std::random_shuffle(potential_rotations.begin(), potential_rotations.end());
 					for (int r = 0; r < potential_rotations.size() && !has_added_room && !curr_door.IsConnected(); r++)
 					{
-						new_room.rotate90(r + 1);
+						
 						for (int new_door_idx = 0; new_door_idx < new_room.m_doors.size() && !has_added_room && !curr_door.IsConnected(); new_door_idx++)
 						{
 							Door& new_door = new_room.m_doors[new_door_idx];
@@ -139,13 +139,18 @@ struct Map
 									has_added_room = true;
 
 									curr_door.SetConnected(true);
+
+									room.m_rot = (Prefab_Rotation)r;
 									m_rooms.push_back(room);
 
 									//Add corridor between doors
 									for (int i = 0; i < corridor_length; i++)
 									{
 										int corridor_num = i + 1;
-										//m_corridors.push_back(Room(PT_CORRIDOR, { curr_door_world_pos.x + (corridor_dir.x * corridor_num), curr_door_world_pos.y + (corridor_dir.y * corridor_num) }, PR_0_DEG));
+
+										Room corr(corridor_room, { curr_door_world_pos.x + (corridor_dir.x * corridor_num), curr_door_world_pos.y + (corridor_dir.y * corridor_num) });
+										corr.m_rot = (Prefab_Rotation)curr_door.m_local_dir;
+										m_corridors.push_back(corr);// Room(PT_CORRIDOR, { curr_door_world_pos.x + (corridor_dir.x * corridor_num), curr_door_world_pos.y + (corridor_dir.y * corridor_num) }, PR_0_DEG));
 									}
 								}
 								else
@@ -155,6 +160,8 @@ struct Map
 								}
 							}
 						}
+
+						new_room.rotate90(1);
 					}
 				}
 			}

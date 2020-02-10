@@ -11,6 +11,8 @@ struct Room
 	std::vector<Door> m_doors;
 	const char* m_file_path;
 
+	Prefab_Rotation m_rot = PR_0_DEG;
+
 	Room(RoomData data, Coord new_origin)
 	{
 		m_dimensions = data.m_dimensions;

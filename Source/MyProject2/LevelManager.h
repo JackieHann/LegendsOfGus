@@ -28,7 +28,7 @@ public:
 private:
 	//Functions used by the CreateLevel Function Only
 	void _CreateLevel(const int seed);
-	void _CreateRoom(Room room);
+	void _CreateRoom(Room& room);
 
 	Map m_curr_map;
 
