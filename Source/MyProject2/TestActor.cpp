@@ -17,7 +17,7 @@ void ATestActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-
+	GetLevelManager()->CreateLevel(1);
 	//When weve got room data, spawn it somewhere
 	//SpawnRoom(room_data, grid_pos)
 

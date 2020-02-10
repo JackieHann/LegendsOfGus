@@ -3,11 +3,17 @@
 #include "LevelDefines.h"
 #include "Room.h"
 #include <algorithm>
+#include "GameManager.h"
+
 struct Map
 {
 	Coord m_dimensions;
 	std::vector<Room> m_rooms;
-	std::vector<Tile> m_corridors;
+	std::vector<Room> m_corridors;
+
+	Map()
+	{
+	}
 
 	Map(Coord new_dimensions) :
 		m_dimensions(new_dimensions)
@@ -134,14 +140,13 @@ struct Map
 									has_added_room = true;
 
 									curr_door.SetConnected(true);
-									//room.m_identifier = to_string(m_rooms.size());
 									m_rooms.push_back(room);
 
 									//Add corridor between doors
 									for (int i = 0; i < corridor_length; i++)
 									{
 										int corridor_num = i + 1;
-										m_corridors.push_back(Tile(PT_CORRIDOR, { curr_door_world_pos.x + (corridor_dir.x * corridor_num), curr_door_world_pos.y + (corridor_dir.y * corridor_num) }, PR_0_DEG));
+										//m_corridors.push_back(Room(PT_CORRIDOR, { curr_door_world_pos.x + (corridor_dir.x * corridor_num), curr_door_world_pos.y + (corridor_dir.y * corridor_num) }, PR_0_DEG));
 									}
 								}
 								else
@@ -198,25 +203,23 @@ struct Map
 	{
 
 		//Display Rooms
-		DisplayMapRooms();
+		SpawnMapRooms();
 
 		//Display Corridors
-		DisplayMapCorridors();
+		SpawnMapCorridors();
 
 	}
 
-	void DisplayMapRooms()
+	void SpawnMapRooms()
 	{
-		std::for_each(m_rooms.begin(), m_rooms.end(), [&](Room& room)
-		{
-			room.DisplayRoom();
-		});
+
 	}
-	void DisplayMapCorridors()
+
+	void SpawnMapCorridors()
 	{
-		std::for_each(m_corridors.begin(), m_corridors.end(), [&](Tile& tile)
-		{
-			tile.DisplayTile({ 0,0 });
-		});
+		//std::for_each(m_corridors.begin(), m_corridors.end(), [&](Tile& tile)
+		//{
+		//	tile.DisplayTile({ 0,0 });
+		//});
 	}
 };

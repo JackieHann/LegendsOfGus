@@ -5,6 +5,7 @@
 
 LevelManager::LevelManager()
 {
+
 }
 
 LevelManager::~LevelManager()
@@ -48,6 +49,44 @@ void LevelManager::CreateLevel(const int seed)
 void LevelManager::_CreateLevel(const int seed)
 {
 	//function that creates and stores the level, generated via the seed.
+	Map new_map({ MAP_DIMENSIONS_X, MAP_DIMENSIONS_Y });
+
+	new_map.GenerateFromRoomData(1);
+
+	_CreateRoomsFromMap(new_map);
+
+
+}
+
+void LevelManager::_CreateRoom(Room room)
+{
+	const float unreal_individual_tile_size = 100.f;
+	const float our_scale = 4.0f;
+	float room_size = 3.0f;
+	float offset = (room_size / 2.f) * (unreal_individual_tile_size * our_scale);
+
+	const float cell_to_unreal_size = (unreal_individual_tile_size * our_scale);
+
+	//Stuff that would be in room_data
+	int x1 = room.m_origin.x;
+	int y1 = room.m_origin.y;
+	int roomsize1 = room.m_dimensions.x;
+
+	//Take that out, scale it to unreal
+	float x1Scaled = x1 * cell_to_unreal_size;
+	float y1Scaled = y1 * cell_to_unreal_size;
+	float offset1 = ((float)roomsize1 / 2.f) * cell_to_unreal_size;
+
+	GetLevelManager()->SpawnBlueprintActor(room.m_file_path, { x1Scaled + offset1, y1Scaled + offset1, 0 }, FRotator(0, 0, 0));
+}
+
+void LevelManager::_CreateRoomsFromMap(Map map)
+{
+
+	std::for_each(map.m_rooms.begin(), map.m_rooms.end(), [&](Room& room)
+	{
+		_CreateRoom(room);
+	});
 
 
 }
