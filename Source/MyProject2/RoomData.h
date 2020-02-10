@@ -52,3 +52,29 @@ struct RoomData
 	}
 
 };
+
+
+//Below defines all blueprint rooms
+RoomData room_3x3_2door_straight(
+	"Rooms/3x3_2door_straight_BP.3x3_2door_straight_BP'", 3,
+	{
+		{{1, 0}, CD_NORTH },
+		{{1, 2}, CD_SOUTH}
+	});
+
+RoomData room_3x3_4door_cross(
+	"Rooms/3x3_4door_BP.3x3_4door_BP'", 3,
+	{
+		{{1, 0}, CD_NORTH },
+		{{2, 1}, CD_EAST },
+		{{1, 2}, CD_SOUTH},
+		{{0, 1}, CD_WEST}
+	});
+
+
+//Contains reference to all potential rooms
+std::vector<RoomData> GLOBAL_ROOM_DATA =
+{
+	room_3x3_2door_straight,
+	room_3x3_4door_cross
+};
