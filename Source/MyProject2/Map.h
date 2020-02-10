@@ -3,7 +3,6 @@
 #include "LevelDefines.h"
 #include "Room.h"
 #include <algorithm>
-#include "GameManager.h"
 
 struct Map
 {

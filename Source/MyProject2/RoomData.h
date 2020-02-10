@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ROOM_DATA_H
+#define ROOM_DATA_H
 
 #include "LevelDefines.h"
 #include "Door.h"
@@ -56,21 +57,21 @@ struct RoomData
 
 //Below defines all blueprint rooms
 
-RoomData start_room_5x5_1door(
-	"test", 1,
+static RoomData start_room_5x5_1door(
+	"Rooms/3x3_2door_straight_BP.3x3_2door_straight_BP'", 5,
 	{
 		{{2, 4}, CD_SOUTH}
 	});
 
 
-RoomData room_3x3_2door_straight(
+static RoomData room_3x3_2door_straight(
 	"Rooms/3x3_2door_straight_BP.3x3_2door_straight_BP'", 3,
 	{
 		{{1, 0}, CD_NORTH },
 		{{1, 2}, CD_SOUTH}
 	});
 
-RoomData room_3x3_4door_cross(
+static RoomData room_3x3_4door_cross(
 	"Rooms/3x3_4door_BP.3x3_4door_BP'", 3,
 	{
 		{{1, 0}, CD_NORTH },
@@ -81,9 +82,10 @@ RoomData room_3x3_4door_cross(
 
 
 //Contains reference to all potential rooms
-std::vector<RoomData> GLOBAL_ROOM_DATA =
+static std::vector<RoomData> GLOBAL_ROOM_DATA =
 {
-	start_room_5x5_1door,
 	room_3x3_2door_straight,
 	room_3x3_4door_cross
 };
+
+#endif

@@ -68,8 +68,8 @@ void LevelManager::_CreateRoom(Room room)
 	const float cell_to_unreal_size = (unreal_individual_tile_size * our_scale);
 
 	//Stuff that would be in room_data
-	int x1 = room.m_origin.x;
-	int y1 = room.m_origin.y;
+	int x1 = room.m_origin.x - (MAP_DIMENSIONS_X / 2);
+	int y1 = room.m_origin.y - (MAP_DIMENSIONS_Y / 2);
 	int roomsize1 = room.m_dimensions.x;
 
 	//Take that out, scale it to unreal
@@ -77,7 +77,7 @@ void LevelManager::_CreateRoom(Room room)
 	float y1Scaled = y1 * cell_to_unreal_size;
 	float offset1 = ((float)roomsize1 / 2.f) * cell_to_unreal_size;
 
-	GetLevelManager()->SpawnBlueprintActor(room.m_file_path, { x1Scaled + offset1, y1Scaled + offset1, 0 }, FRotator(0, 0, 0));
+	SpawnBlueprintActor(room.m_file_path, { x1Scaled + offset1, y1Scaled + offset1, 0 }, FRotator(0, 0, 0));
 }
 
 void LevelManager::_CreateRoomsFromMap(Map map)
