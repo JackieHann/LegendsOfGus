@@ -51,7 +51,9 @@ void LevelManager::_CreateLevel(const int seed)
 	//function that creates and stores the level, generated via the seed.
 	Map new_map({ MAP_DIMENSIONS_X, MAP_DIMENSIONS_Y });
 
+	// Spawn initial rooms
 	new_map.GenerateFromRoomData(1);
+	new_map.ConnectCorridors();
 
 	_CreateRoomsFromMap(new_map);
 

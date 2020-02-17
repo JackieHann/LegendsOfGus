@@ -204,28 +204,62 @@ struct Map
 
 	}
 
-
-	void DisplayMap()
+	void ConnectCorridors()
 	{
+		// check each room in the map
+		for (int roomIndex = 0; roomIndex < m_rooms.size(); ++roomIndex)
+		{
+			// check each door in each room
+			for (int doorIndex = 0; doorIndex < m_rooms[roomIndex].m_doors.size(); ++doorIndex)
+			{
+				// If door isnt connected to another room, try and connect to room/corridor
+				if (!m_rooms[roomIndex].m_doors[doorIndex].IsConnected())
+				{
+					Coord oldDoorPos = { m_rooms[roomIndex].m_doors[doorIndex].m_local_pos.x + m_rooms[roomIndex].m_origin.x, m_rooms[roomIndex].m_doors[doorIndex].m_local_pos.y + m_rooms[roomIndex].m_origin.y };
 
-		//Display Rooms
-		SpawnMapRooms();
+					Door potentialConnectedDoor;
+					bool validDoor = false;
+					Room potentialConnectedCorr(corridor_room, { 0, 0 });
+					bool validCorr = false;
 
-		//Display Corridors
-		SpawnMapCorridors();
+					checkValidDoor(oldDoorPos, potentialConnectedDoor, validDoor);
+					checkValidCorr(oldDoorPos, potentialConnectedCorr, validCorr);
+					
+					// if there is a valid door, connect corridor to valid door
+					if (validDoor)
+					{
 
+					}
+					// if there is a valid corridor, connect corridor to valid corridor
+					else if (validCorr)
+					{
+
+					}
+					// Block door as it cannot connect to anything
+					else
+					{
+
+					}
+				}
+			}
+		}
 	}
 
-	void SpawnMapRooms()
+	void checkValidDoor(Coord oldDoorPos, Door& newDoor, bool& valid)
 	{
+		// check each room in the map
+		for (int roomIndex = 0; roomIndex < m_rooms.size(); ++roomIndex)
+		{
+			// check each door in each room
+			for (int doorIndex = 0; doorIndex < m_rooms[roomIndex].m_doors.size(); ++doorIndex)
+			{
 
+			}
+		}
 	}
 
-	void SpawnMapCorridors()
+	void checkValidCorr(Coord oldDoorPos, Room& corridor, bool& valid)
 	{
-		//std::for_each(m_corridors.begin(), m_corridors.end(), [&](Tile& tile)
-		//{
-		//	tile.DisplayTile({ 0,0 });
-		//});
+
 	}
 };
