@@ -69,6 +69,12 @@ static RoomData corridor_room(
 		
 	});
 
+static RoomData door_room(
+	"Rooms/Door.Door'", 1,
+	{
+
+	});
+
 static RoomData room_3x3_2door_straight(
 	"Rooms/3x3_2door_straight_BP.3x3_2door_straight_BP'", 3,
 	{

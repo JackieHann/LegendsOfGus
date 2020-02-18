@@ -89,9 +89,11 @@ void LevelManager::_CreateRoomsFromMap(Map map)
 	{
 		_CreateRoom(room);
 	});
-
-
 	std::for_each(map.m_corridors.begin(), map.m_corridors.end(), [&](Room& room)
+	{
+		_CreateRoom(room);
+	});
+	std::for_each(map.m_blockages.begin(), map.m_blockages.end(), [&](Room& room)
 	{
 		_CreateRoom(room);
 	});

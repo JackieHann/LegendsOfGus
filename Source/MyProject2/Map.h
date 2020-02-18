@@ -9,6 +9,7 @@ struct Map
 	Coord m_dimensions;
 	std::vector<Room> m_rooms;
 	std::vector<Room> m_corridors;
+	std::vector<Room> m_blockages;
 
 	Map()
 	{
@@ -197,6 +198,33 @@ struct Map
 		return is_opposite;
 	}
 
+	Cardinal_Direction getOppositeDirection(Cardinal_Direction d)
+	{
+		switch (d)
+		{
+			case CD_NORTH:
+			{
+				return CD_SOUTH;
+			}
+			case CD_EAST:
+			{
+				return CD_WEST;
+			}
+			case CD_SOUTH:
+			{
+				return CD_NORTH;
+			}
+			case CD_WEST:
+			{
+				return CD_EAST;
+			}
+			default:
+			{
+				return CD_NORTH;
+			}
+		}
+	}
+
 	void AddRoomFromRoomData(RoomData data, Coord origin)
 	{
 		Room new_room(data, origin);
@@ -216,19 +244,29 @@ struct Map
 				if (!m_rooms[roomIndex].m_doors[doorIndex].IsConnected())
 				{
 					Coord oldDoorPos = { m_rooms[roomIndex].m_doors[doorIndex].m_local_pos.x + m_rooms[roomIndex].m_origin.x, m_rooms[roomIndex].m_doors[doorIndex].m_local_pos.y + m_rooms[roomIndex].m_origin.y };
+					Cardinal_Direction oldDoorDir = m_rooms[roomIndex].m_doors[doorIndex].m_local_dir;
 
 					Door potentialConnectedDoor;
 					bool validDoor = false;
-					Room potentialConnectedCorr(corridor_room, { 0, 0 });
+					std::vector<Room> potentialConnectedCorridors;;
 					bool validCorr = false;
 
-					checkValidDoor(oldDoorPos, potentialConnectedDoor, validDoor);
-					checkValidCorr(oldDoorPos, potentialConnectedCorr, validCorr);
+					// Amount of corridors that need spawning
+					int corridorCount = 0;
+
+					checkValidDoor(oldDoorPos, oldDoorDir, potentialConnectedDoor, validDoor, corridorCount);
+					checkValidCorr(oldDoorPos, oldDoorDir, potentialConnectedCorridors, validCorr, corridorCount);
 					
 					// if there is a valid door, connect corridor to valid door
 					if (validDoor)
 					{
-
+						Coord corrDir = GetDirectionFromCardinal(oldDoorDir);
+						for (int count = 0; count < corridorCount; ++count)
+						{
+							Coord corr_pos = { oldDoorPos.x + (corrDir.x * (count + 1)), oldDoorPos.y + (corrDir.y * (count + 1)) };
+							Room corr(corridor_room, corr_pos);
+							m_corridors.push_back(corr);
+						}
 					}
 					// if there is a valid corridor, connect corridor to valid corridor
 					else if (validCorr)
@@ -238,14 +276,17 @@ struct Map
 					// Block door as it cannot connect to anything
 					else
 					{
-
+						// Spawn blockage prefab at old door locations
+						Room blockage(door_room, oldDoorPos);
+						blockage.m_rot = (Prefab_Rotation)getOppositeDirection(oldDoorDir);
+						m_blockages.push_back(blockage);
 					}
 				}
 			}
 		}
 	}
 
-	void checkValidDoor(Coord oldDoorPos, Door& newDoor, bool& valid)
+	void checkValidDoor(Coord oldDoorPos, Cardinal_Direction oldDoorDir, Door& newDoor, bool& valid, int& corridorCount)
 	{
 		// check each room in the map
 		for (int roomIndex = 0; roomIndex < m_rooms.size(); ++roomIndex)
@@ -253,12 +294,32 @@ struct Map
 			// check each door in each room
 			for (int doorIndex = 0; doorIndex < m_rooms[roomIndex].m_doors.size(); ++doorIndex)
 			{
-
+				// Door can only connect to another door with the opposite cardinal direction
+				if (IsOppositeDirection(oldDoorDir, m_rooms[roomIndex].m_doors[doorIndex].m_local_dir))
+				{
+					Coord newDoorPos = { m_rooms[roomIndex].m_doors[doorIndex].m_local_pos.x + m_rooms[roomIndex].m_origin.x, m_rooms[roomIndex].m_doors[doorIndex].m_local_pos.y + m_rooms[roomIndex].m_origin.y };
+					
+					// calculate expected door position based off old doors direction
+					Coord newDoorOffset = GetDirectionFromCardinal(oldDoorDir);
+					// Check if new doors absolute position is in the same path as the current door
+					for (int idx = 4; idx > 1; --idx)
+					{
+						Coord testPos = { oldDoorPos.x + (newDoorOffset.x * idx), oldDoorPos.y + (newDoorOffset.y * idx) };
+						// Doors can connect!
+						if ((newDoorPos.x == testPos.x) && ((newDoorPos.y == testPos.y)))
+						{
+							newDoor = m_rooms[roomIndex].m_doors[doorIndex];
+							valid = true;
+							corridorCount = idx - 1;
+							break;
+						}
+					}
+				}
 			}
 		}
 	}
 
-	void checkValidCorr(Coord oldDoorPos, Room& corridor, bool& valid)
+	void checkValidCorr(Coord oldDoorPos, Cardinal_Direction oldDoorDir, std::vector<Room>& corridor, bool& valid, int& corridorCount)
 	{
 
 	}
