@@ -2,6 +2,7 @@
 
 
 #include "TestActor.h"
+#include <ctime>
 
 // Sets default values
 ATestActor::ATestActor()
@@ -17,7 +18,7 @@ void ATestActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetLevelManager()->CreateLevel(1);
+	GetLevelManager()->CreateLevel(time(0));
 	//When weve got room data, spawn it somewhere
 	//SpawnRoom(room_data, grid_pos)
 

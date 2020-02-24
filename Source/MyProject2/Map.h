@@ -50,14 +50,14 @@ struct Map
 	{
 		srand(seed);
 
-		while (m_rooms.size() < 25)
+		while (m_rooms.size() < 5)
 		{
 			m_rooms.clear();
 			m_corridors.clear();
 
 			AddRoomFromRoomData(start_room_5x5_1door, { (MAP_DIMENSIONS_X/2)-2, (MAP_DIMENSIONS_Y / 2) - 2 });
 
-			for (int i = 0; i < 100; i++)
+			for (int i = 0; i < 25; i++)
 				AddRoomsToDoor();
 		}
 	}
