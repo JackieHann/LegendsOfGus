@@ -53,7 +53,7 @@ void LevelManager::_CreateLevel(const int seed)
 
 	// Spawn initial rooms
 	new_map.GenerateFromRoomData(1);
-	new_map.ConnectCorridors();
+	//new_map.ConnectCorridors();
 
 	_CreateRoomsFromMap(new_map);
 
