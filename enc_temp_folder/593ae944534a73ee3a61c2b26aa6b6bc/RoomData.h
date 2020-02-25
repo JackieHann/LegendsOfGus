@@ -76,12 +76,6 @@ static RoomData corridor_room_cross(
 
 	});
 
-static RoomData corridor_room_t(
-	"Rooms/Corridor_T.Corridor_T'", 1,
-	{
-
-	});
-
 static RoomData door_room(
 	"Rooms/Door.Door'", 1,
 	{

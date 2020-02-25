@@ -311,10 +311,9 @@ struct Map
 					bool validCorr = false;
 					// Amount of corridors that need spawning
 					int corridorCount = 0;
-					int connCorridorIndex = -1;
 
 					checkValidDoor(currDoorPos, currDoorDir, validDoor, corridorCount);
-					checkValidCorr(currDoorPos, currDoorDir, validCorr, corridorCount, connCorridorIndex);
+					checkValidCorr(currDoorPos, currDoorDir, validCorr, corridorCount);
 					
 					// if there is a valid door, connect corridor to valid door
 					if (validDoor)
@@ -348,16 +347,6 @@ struct Map
 							m_rooms[roomIndex].m_doors[doorIndex].SetConnected(true);
 							// Need to modify existing corridor prefab we are connecting to here!
 							// TO DO
-						}
-						if (connCorridorIndex != -1)
-						{
-							if (m_corridors.at(connCorridorIndex).m_file_path == corridor_room_t.m_file_path)
-								m_corridors.at(connCorridorIndex).m_file_path = corridor_room_cross.m_file_path;
-							else
-							{
-								m_corridors.at(connCorridorIndex).m_rot = (Prefab_Rotation)currDoorDir;
-								m_corridors.at(connCorridorIndex).m_file_path = corridor_room_t.m_file_path;
-							}
 						}
 					}
 					// Block door as it cannot connect to anything
@@ -419,7 +408,7 @@ struct Map
 		}
 	}
 
-	void checkValidCorr(Coord currDoorPos, Cardinal_Direction currDoorDir, bool& valid, int& corridorCount, int& index)
+	void checkValidCorr(Coord currDoorPos, Cardinal_Direction currDoorDir, bool& valid, int& corridorCount)
 	{
 		bool invalidDoor = false;
 		// check each corridor in the map
@@ -443,7 +432,6 @@ struct Map
 					// if current corridor position matches the corridor you are trying to connect to
 					if ((newCorrPos.x == testPos.x) && (newCorrPos.y == testPos.y) && !invalidDoor)
 					{
-						index = corrIndex;
 						valid = true;
 						corridorCount = temp_corridors.size();
 						break;
