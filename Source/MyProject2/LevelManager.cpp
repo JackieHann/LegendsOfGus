@@ -16,12 +16,12 @@ void LevelManager::LM_DoSomething()
 {
 }
 
-void LevelManager::SpawnBlueprintActor(const char* file_path, FVector world_pos, FRotator world_rot)
+void LevelManager::SpawnBlueprintActor(std::string file_path, FVector world_pos, FRotator world_rot)
 {
 	char buffer[100];
 	const char* root_dir = "Blueprint'/Game/Blueprints/";
 	strcpy(buffer, root_dir);
-	strcat(buffer, file_path);
+	strcat(buffer, file_path.c_str());
 
 	UObject* SpawnActor = Cast<UObject>(StaticLoadObject(UObject::StaticClass(), NULL, ANSI_TO_TCHAR(buffer)));
 
@@ -53,7 +53,7 @@ void LevelManager::_CreateLevel(const int seed)
 
 	// Spawn initial rooms
 	new_map.GenerateFromRoomData(1);
-	//new_map.ConnectCorridors();
+	new_map.ConnectCorridors();
 
 	_CreateRoomsFromMap(new_map);
 

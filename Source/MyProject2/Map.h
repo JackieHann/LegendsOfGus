@@ -33,6 +33,7 @@ struct Map
 	{
 	}
 
+	// check if a room can fit into the level
 	bool RoomIsValid(Room& room, int offset = 1)
 	{
 		bool valid = true;
@@ -63,12 +64,38 @@ struct Map
 
 		return valid;
 	}
-	
+
+	// check if a corridor can fit into the level
+	bool CorrIsValid(Room& corr, int offset)
+	{
+		bool valid = true;
+		
+		// A room is valid if it fits within the play area
+		if (corr.m_origin.x >= 0 &&
+			corr.m_origin.y >= 0 &&
+			corr.m_origin.x + corr.m_dimensions.x - 1 < m_dimensions.x &&
+			corr.m_origin.y + corr.m_dimensions.y - 1 < m_dimensions.y)
+		{
+			// Does it overlap with any other rooms?
+			std::for_each(m_rooms.begin(), m_rooms.end(), [&](Room& r)
+			{
+				if (valid && r.Intersects(corr, offset))
+					valid = false;
+			});
+		}
+		else
+		{
+			valid = false;
+		}
+
+		return valid;
+	}
+
 	// Create room from room data object
 	void GenerateFromRoomData(int seed)
 	{
 		srand(seed);
-		while (m_rooms.size() < 25)
+		while (m_rooms.size() < 100)
 		{
 			m_rooms.clear();
 			m_corridors.clear();
@@ -76,7 +103,7 @@ struct Map
 
 			AddRoomFromRoomData(start_room_5x5_1door, { (MAP_DIMENSIONS_X/2)-2, (MAP_DIMENSIONS_Y / 2) - 2 });
 
-			for (int i = 0; i < 100; i++)
+			for (int i = 0; i < 300; i++)
 			{
 				AddRoomsToDoor();
 			}
@@ -159,7 +186,7 @@ struct Map
 									Room corr(corridor_room, potentialCorridorPos);
 
 									// If any of the corridors dont fit
-									if (!RoomIsValid(corr, 0))
+									if (!CorrIsValid(corr, 0))
 										valid_corridors = false;
 
 									corr.m_rot = (Prefab_Rotation)curr_door.m_local_dir;
@@ -175,7 +202,15 @@ struct Map
 									// Add room to room vector
 									m_rooms.push_back(room);
 									// Add corridors to corridor vector
-									std::for_each(temp.begin(), temp.end(), [&](Room& r) { m_corridors.push_back(r); });
+									std::for_each(temp.begin(), temp.end(), [&](Room& r) { 
+										int corridor_index = -1;
+										if (CorridorCollides(r, corridor_index))
+										{
+											m_corridors.at(corridor_index).m_file_path = corridor_room_cross.m_file_path;
+										}
+										else
+											m_corridors.push_back(r); 
+									});
 									has_added_room = true;
 									// Clear temp vector
 									temp.clear();
@@ -308,7 +343,7 @@ struct Map
 							Room corr(corridor_room, corr_pos);
 							corr.m_rot = (Prefab_Rotation)m_rooms[roomIndex].m_doors[doorIndex].m_local_dir;
 							m_corridors.push_back(corr);
-							// Set original door to be connected so i cannot be reused
+							// Set original door to be connected so it cannot be reused
 							m_rooms[roomIndex].m_doors[doorIndex].SetConnected(true);
 							// Need to modify existing corridor prefab we are connecting to here!
 							// TO DO
@@ -343,25 +378,28 @@ struct Map
 					Coord newDoorPos = { m_rooms[roomIndex].m_doors[doorIndex].m_local_pos.x + m_rooms[roomIndex].m_origin.x, m_rooms[roomIndex].m_doors[doorIndex].m_local_pos.y + m_rooms[roomIndex].m_origin.y };
 					// calculate expected door direction based off old doors direction
 					Coord newDoorOffset = GetDirectionFromCardinal(currDoorDir);
-					// Check if new doors absolute position is in line with the current door
-					for (int idx = 0; idx < MAX_CORRIDOR_LENGTH; ++idx)
+					// Check if new door can connect with the current door
+					std::vector<Room> temp_corridors;
+					Coord testPos = { 0, 0 };
+					for (int idx = 0; idx < MAX_CORRIDOR_LENGTH + 1; ++idx)
 					{
-						// for each possible tile in a corridor, check if that tile intersects a current room
-						Coord testPos = { currDoorPos.x + (newDoorOffset.x * idx + 1), currDoorPos.y + (newDoorOffset.y * idx + 1) };
-						// Check if corridor can be placed and not intersect another room
-						Room corr(corridor_room, testPos);
-						if (!RoomIsValid(corr, 0))
-						{
-							invalidDoor = true;
-						}
-						// Doors can connect!
+						testPos = { currDoorPos.x + (newDoorOffset.x * (idx + 1)), currDoorPos.y + (newDoorOffset.y * (idx + 1)) };
+						// if current corridor position is equal to the door youre trying to connect to
 						if ((newDoorPos.x == testPos.x) && ((newDoorPos.y == testPos.y)) && !invalidDoor)
 						{
 							m_rooms[roomIndex].m_doors[doorIndex].SetConnected(true);
 							valid = true;
-							corridorCount = idx - 1;
+							corridorCount = temp_corridors.size();
 							break;
 						}
+						// for each possible tile in a corridor, check if that tile intersects a current room
+						Room corr(corridor_room, testPos);
+						if (!CorrIsValid(corr, 0))
+						{
+							invalidDoor = true;
+						}							
+						corr.m_rot = (Prefab_Rotation)currDoorDir;
+						temp_corridors.push_back(corr);
 					}
 				}
 				if (valid) break;
@@ -370,32 +408,58 @@ struct Map
 		}
 	}
 
-	void checkValidCorr(Coord oldDoorPos, Cardinal_Direction oldDoorDir, bool& valid, int& corridorCount)
+	void checkValidCorr(Coord currDoorPos, Cardinal_Direction currDoorDir, bool& valid, int& corridorCount)
 	{
+		bool invalidDoor = false;
 		// check each corridor in the map
-		std::vector<Room>newCorridors;
+		std::vector<Room> newCorridors;
 		for (int corrIndex = 0; corrIndex < m_corridors.size(); ++corrIndex)
 		{
-			// Get corridor direction as coord
-			Coord corrOffset = GetDirectionFromCardinal(oldDoorDir);
-			// Check if corridors position is in the same path as the current door
-			for (int idx = MAX_CORRIDOR_LENGTH + 1; idx > MIN_CORRIDOR_LENGTH; --idx)
+			// Corridor can only connect to a corridor with a direction different to itself
+			if (currDoorDir != (Cardinal_Direction)m_corridors[corrIndex].m_rot)
 			{
-				Coord testPos = { oldDoorPos.x + (corrOffset.x * idx), oldDoorPos.y + (corrOffset.y * idx) };
-				// Check if corridor can be place and not intersect another room
-				Room corr(corridor_room, testPos);
-				if (!RoomIsValid(corr, 0))
+				// Get position of potentially connected corridor
+				Coord newCorrPos = { m_corridors[corrIndex].m_origin.x, m_corridors[corrIndex].m_origin.y };
+				// Get corridor direction as coord
+				Coord corrOffset = GetDirectionFromCardinal(currDoorDir);
+				// Check if corridors can connect with current corridor
+				std::vector<Room> temp_corridors;
+				bool valid_corridors = true;
+				Coord testPos = { 0, 0 };
+				for (int idx = 0; idx < MAX_CORRIDOR_LENGTH + 1; ++idx)
 				{
-					break;
-				}
-				// Door can connect!
-				if ((m_corridors[idx].m_origin.x == testPos.x) && (m_corridors[idx].m_origin.y == testPos.y))
-				{
-					valid = true;
-					corridorCount = idx - 1;
-					break;
+					testPos = { currDoorPos.x + (corrOffset.x * (idx + 1)), currDoorPos.y + (corrOffset.y * (idx + 1)) };
+					// if current corridor position matches the corridor you are trying to connect to
+					if ((newCorrPos.x == testPos.x) && (newCorrPos.y == testPos.y) && !invalidDoor)
+					{
+						valid = true;
+						corridorCount = temp_corridors.size();
+						break;
+					}
+					// for each possible tile in a corridor, check if that tile intersects a current room or corridor
+					Room corr(corridor_room, testPos);
+					if (!CorrIsValid(corr, 0))
+					{
+						invalidDoor = true;
+					}
+					corr.m_rot = (Prefab_Rotation)currDoorDir;
+					temp_corridors.push_back(corr);
 				}
 			}
+			if (valid) break;
 		}
+	}
+
+	bool CorridorCollides(Room& corr, int& index)
+	{
+		for (int i = 0; i < m_corridors.size(); ++i)
+		{
+			if ((corr.m_origin.x == m_corridors[i].m_origin.x) && (corr.m_origin.y == m_corridors[i].m_origin.y))
+			{
+				index = i;
+				return true;
+			}
+		}
+		return false;
 	}
 };
