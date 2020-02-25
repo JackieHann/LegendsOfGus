@@ -18,6 +18,8 @@
 #define MIN_CORRIDOR_LENGTH 1
 #define MAX_CORRIDOR_LENGTH 5
 
+#define ROOM_PADDING 1
+
 #define MAX_ROOM_SIZE 9
 #define MIN_ROOM_SIZE 3
 

@@ -37,16 +37,22 @@ struct Map
 	{
 		bool valid = true;
 
-		//A room is valid if it fits within the play area
+		// A room is valid if it fits within the play area
 		if (room.m_origin.x >= 0 &&
 			room.m_origin.y >= 0 &&
 			room.m_origin.x + room.m_dimensions.x - 1 < m_dimensions.x &&
 			room.m_origin.y + room.m_dimensions.y - 1 < m_dimensions.y)
 		{
-			//Does it overlap with any other rooms?
+			// Does it overlap with any other rooms?
 			std::for_each(m_rooms.begin(), m_rooms.end(), [&](Room& r)
 			{
 				if (valid && r.Intersects(room, offset))
+					valid = false;
+			});
+			// Does it overlap with any existing coridors?
+			std::for_each(m_corridors.begin(), m_corridors.end(), [&](Room& c)
+			{
+				if (valid && c.Intersects(room, offset))
 					valid = false;
 			});
 		}
@@ -58,24 +64,26 @@ struct Map
 		return valid;
 	}
 	
-
-	//NEW FUNCTIONS
+	// Create room from room data object
 	void GenerateFromRoomData(int seed)
 	{
 		srand(seed);
-
 		while (m_rooms.size() < 25)
 		{
 			m_rooms.clear();
 			m_corridors.clear();
+			m_blockages.clear();
 
 			AddRoomFromRoomData(start_room_5x5_1door, { (MAP_DIMENSIONS_X/2)-2, (MAP_DIMENSIONS_Y / 2) - 2 });
 
 			for (int i = 0; i < 100; i++)
+			{
 				AddRoomsToDoor();
+			}
 		}
 	}
 
+	// Attempt to add a room on to a random existing door that is not connected to anything
 	void AddRoomsToDoor()
 	{
 		std::vector<RoomData> potential_rooms = GLOBAL_ROOM_DATA;
@@ -99,8 +107,7 @@ struct Map
 					//For every rotation of the room
 					//std::random_shuffle(potential_rotations.begin(), potential_rotations.end());
 					for (int r = 0; r < potential_rotations.size() && !has_added_room && !curr_door.IsConnected(); r++)
-					{
-						
+					{	
 						for (int new_door_idx = 0; new_door_idx < new_room.m_doors.size() && !has_added_room && !curr_door.IsConnected(); new_door_idx++)
 						{
 							Door& new_door = new_room.m_doors[new_door_idx];
@@ -111,14 +118,8 @@ struct Map
 								Coord curr_door_world_pos = { curr_door.m_local_pos.x + curr_room.m_origin.x, curr_door.m_local_pos.y + curr_room.m_origin.y };
 								Coord new_door_world_pos = { curr_door_world_pos.x - new_door.m_local_pos.x, curr_door_world_pos.y - new_door.m_local_pos.y };
 
-								const int room_gap = 1;
-								const int min_corridor_length = room_gap;
-								const int max_corridor_length = min_corridor_length + 2;
-								//const int corridor_length = RandomIntInRange(min_corridor_length, max_corridor_length);
 								std::random_shuffle(potential_corridor_lengths.begin(), potential_corridor_lengths.end());
 								const int corridor_length = potential_corridor_lengths[0];
-
-
 
 								Coord corridor_dir = GetDirectionFromCardinal(curr_door.m_local_dir);
 								switch (curr_door.m_local_dir)
@@ -147,24 +148,37 @@ struct Map
 
 								new_door.SetConnected(true);
 								Room room(new_room, new_door_world_pos);
-								if (RoomIsValid(room, room_gap))
+
+								// Check if each corridor that attaches this room can fit and not overlap
+								std::vector<Room> temp;
+								bool valid_corridors = true;
+
+								for (int i = 0; i < corridor_length; i++)
 								{
-									has_added_room = true;
+									Coord potentialCorridorPos = { curr_door_world_pos.x + (corridor_dir.x * (i + 1)), curr_door_world_pos.y + (corridor_dir.y * (i + 1)) };
+									Room corr(corridor_room, potentialCorridorPos);
 
+									// If any of the corridors dont fit
+									if (!RoomIsValid(corr, 0))
+										valid_corridors = false;
+
+									corr.m_rot = (Prefab_Rotation)curr_door.m_local_dir;
+									temp.push_back(corr);
+								}
+
+								// If new room & corridor fits into grid and does not overlap with anything
+								if (RoomIsValid(room, ROOM_PADDING) && valid_corridors)
+								{
+									// Set original door to be connected
 									curr_door.SetConnected(true);
-
 									room.m_rot = (Prefab_Rotation)r;
+									// Add room to room vector
 									m_rooms.push_back(room);
-
-									//Add corridor between doors
-									for (int i = 0; i < corridor_length; i++)
-									{
-										int corridor_num = i + 1;
-
-										Room corr(corridor_room, { curr_door_world_pos.x + (corridor_dir.x * corridor_num), curr_door_world_pos.y + (corridor_dir.y * corridor_num) });
-										corr.m_rot = (Prefab_Rotation)curr_door.m_local_dir;
-										m_corridors.push_back(corr);
-									}
+									// Add corridors to corridor vector
+									std::for_each(temp.begin(), temp.end(), [&](Room& r) { m_corridors.push_back(r); });
+									has_added_room = true;
+									// Clear temp vector
+									temp.clear();
 								}
 								else
 								{
@@ -173,7 +187,6 @@ struct Map
 								}
 							}
 						}
-
 						new_room.rotate90(1);
 					}
 				}
