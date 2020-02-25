@@ -4,11 +4,12 @@
 #include "LevelDefines.h"
 #include "Door.h"
 #include <vector>
+#include <string>
 
 //Pure data representation of rooms
 struct RoomData
 {
-	const char* m_file_path;
+	std::string m_file_path;
 	Coord m_dimensions;
 	std::vector<Door> m_doors;
 
@@ -18,7 +19,7 @@ struct RoomData
 		m_doors.clear();
 	}
 
-	RoomData(const char* str, int size, std::vector<Door> doors) :
+	RoomData(std::string str, int size, std::vector<Door> doors) :
 		m_dimensions({ size, size }),
 		m_doors(doors),
 		m_file_path(str)
@@ -69,7 +70,24 @@ static RoomData corridor_room(
 		
 	});
 
-/*static RoomData room_3x3_2door_straight(
+static RoomData corridor_room_cross(
+	"Rooms/Corridor_Cross.Corridor_Cross'", 1,
+	{
+
+	});
+
+static RoomData corridor_room_t(
+	"Rooms/Corridor_T.Corridor_T'", 1,
+	{
+
+	});
+
+static RoomData door_room(
+	"Rooms/Door.Door'", 1,
+	{
+
+	});
+
 	"Rooms/3x3_2door_straight_BP.3x3_2door_straight_BP'", 3,
 	{
 		{{1, 0}, CD_NORTH },

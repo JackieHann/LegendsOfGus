@@ -3,13 +3,14 @@
 #include "LevelDefines.h"
 #include "RoomData.h"
 #include <vector>
+#include <string>
 struct Room
 {
 	Coord	m_origin;
 	Coord	m_dimensions;
 
 	std::vector<Door> m_doors;
-	const char* m_file_path;
+	std::string m_file_path;
 
 	Prefab_Rotation m_rot = PR_0_DEG;
 
