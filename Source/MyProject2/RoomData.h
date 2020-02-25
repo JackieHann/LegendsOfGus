@@ -83,11 +83,12 @@ static RoomData corridor_room_t(
 	});
 
 static RoomData door_room(
-	"Rooms/Door.Door'", 1,
+	"Rooms/Blockade.Blockade'", 1,
 	{
 
 	});
 
+static RoomData room_3x3_2door_straight(
 	"Rooms/3x3_2door_straight_BP.3x3_2door_straight_BP'", 3,
 	{
 		{{1, 0}, CD_NORTH },
@@ -123,7 +124,7 @@ static RoomData room_3x3_1door(
 	"Rooms/3x3_1door_BP.3x3_1door_BP'", 3,
 	{
 		{{1, 2}, CD_SOUTH}
-	});*/
+	});
 
 static RoomData room_3x3_james(
 	"Rooms/3x3Room1.3x3Room1'", 3,
@@ -163,12 +164,12 @@ static std::vector<RoomData> GLOBAL_ROOM_DATA =
 	room_3x3_james,
 	room_5x5_james,
 	room_7x7_james,
-	room_9x9_james
-	//room_3x3_2door_straight,
-	//room_3x3_4door_cross,
-	//room_3x3_3door_T,
-	//room_3x3_2door_R,
-	//room_3x3_1door
+	room_9x9_james,
+	room_3x3_2door_straight,
+	room_3x3_4door_cross,
+	room_3x3_3door_T,
+	room_3x3_2door_R,
+	room_3x3_1door
 };
 
 #endif
