@@ -101,7 +101,7 @@ struct Map
 			m_corridors.clear();
 			m_blockages.clear();
 
-			AddRoomFromRoomData(start_room_5x5_1door, { (MAP_DIMENSIONS_X/2)-2, (MAP_DIMENSIONS_Y / 2) - 2 });
+			AddRoomFromRoomData(start_room_5x5_1door, { (MAP_DIMENSIONS_X/2) -1, (MAP_DIMENSIONS_Y / 2)-1 });
 
 			for (int i = 0; i < 300; i++)
 			{
