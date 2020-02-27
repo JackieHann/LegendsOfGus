@@ -38,7 +38,11 @@ void LevelManager::SpawnBlueprintActor(std::string file_path, FVector world_pos,
 	}
 
 	UWorld* World = GWorld;
-	World->SpawnActor<AActor>(GeneratedBP->GeneratedClass, world_pos, world_rot);
+	ARoomActor* spawnedActor = World->SpawnActor<ARoomActor>(GeneratedBP->GeneratedClass, world_pos, world_rot);
+	if (spawnedActor)
+	{
+		spawnedActor->InitializeRoom(3.0f);
+	}
 }
 
 void LevelManager::CreateLevel(const int seed)
@@ -64,22 +68,18 @@ void LevelManager::_CreateRoom(Room& room)
 {
 	const float unreal_individual_tile_size = 100.f;
 	const float our_scale = 4.0f;
-	float room_size = 3.0f;
-	float offset = (room_size / 2.f) * (unreal_individual_tile_size * our_scale);
-
 	const float cell_to_unreal_size = (unreal_individual_tile_size * our_scale);
 
-	//Stuff that would be in room_data
-	int x1 = room.m_origin.x - (MAP_DIMENSIONS_X / 2) -2;
-	int y1 = room.m_origin.y - (MAP_DIMENSIONS_Y / 2) -2;
-	int roomsize1 = room.m_dimensions.x;
+	int x = room.m_origin.x - (MAP_DIMENSIONS_X / 2) -2;
+	int y = room.m_origin.y - (MAP_DIMENSIONS_Y / 2) -2;
+	int room_size = room.m_dimensions.x;
 
 	//Take that out, scale it to unreal
-	float x1Scaled = x1 * cell_to_unreal_size;
-	float y1Scaled = y1 * cell_to_unreal_size;
-	float offset1 = ((float)roomsize1 / 2.f) * cell_to_unreal_size;
+	float xScaled = x * cell_to_unreal_size;
+	float yScaled = y * cell_to_unreal_size;
+	float offset = ((float)room_size / 2.f) * cell_to_unreal_size;
 
-	SpawnBlueprintActor(room.m_file_path, { x1Scaled + offset1, y1Scaled + offset1, 0 }, FRotator(0, 90*(int)room.m_rot, 0));
+	SpawnBlueprintActor(room.m_file_path, { xScaled + offset, yScaled + offset, 0 }, FRotator(0, 90*(int)room.m_rot, 0));
 }
 
 void LevelManager::_CreateRoomsFromMap(Map map)

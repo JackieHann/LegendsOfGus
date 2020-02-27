@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/World.h"
 #include <string>
+#include "RoomActor.h"
 #include "Map.h"
 
 /**
