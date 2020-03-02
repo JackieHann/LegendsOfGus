@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
 #include "Components/SceneComponent.h"
+#include <string>
+#include "EnemySpawner.h"
 #include "RoomActor.generated.h"
 
 UCLASS()
@@ -28,6 +30,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
 	UFUNCTION()
 	void onOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
@@ -37,7 +40,7 @@ public:
 	{
 		if (EnterTrigger)
 		{
-			EnterTrigger->SetBoxExtent({ roomsize * 200.f, roomsize * 200.f, 100.0f });
+			EnterTrigger->SetBoxExtent({ roomsize * 200.f, roomsize * 200.f, 200.0f });
 		}
 	}
 

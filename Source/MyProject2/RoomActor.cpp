@@ -38,10 +38,25 @@ void ARoomActor::Tick(float DeltaTime)
 
 // Called on collider overlap
 void ARoomActor::onOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
+{ 
+	// Need to check if the object doing the colliding is the player
 	if (!bRoomEntered && otherActor && (otherActor != this) && otherComponent)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("overlap"));
+		// Which room has been collided with
+		FString debugText = "Overlapping:" + overlappedComponent->GetOwner()->GetName() +" with " + otherComponent->GetOwner()->GetName();
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *debugText);
+
+		FName tag = "Spawner";
+		AActor* parent = overlappedComponent->GetOwner();
+		TSet<UActorComponent*> components = parent->GetComponents();
+		for (auto& component : components)
+		{
+			if (component->ComponentHasTag(UGameplayTagsManager::Get().RequestGameplayTag("Spawner").GetTagName()))
+			{
+				FString text = "Found a spawner";
+				UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+			}
+		}	
 	}
 }
 
