@@ -19,6 +19,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* EnterTrigger;
+	bool bRoomEntered;
 
 protected:
 	// Called when the game starts or when spawned
@@ -27,6 +28,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	UFUNCTION()
+	void onOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	void Test() { int i = 0; }
 
@@ -34,7 +37,7 @@ public:
 	{
 		if (EnterTrigger)
 		{
-			EnterTrigger->SetBoxExtent({ roomsize * 200.f, roomsize * 200.f, 0.0f });
+			EnterTrigger->SetBoxExtent({ roomsize * 200.f, roomsize * 200.f, 100.0f });
 		}
 	}
 

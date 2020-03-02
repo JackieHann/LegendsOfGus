@@ -38,12 +38,7 @@ void LevelManager::SpawnBlueprintActor(std::string file_path, FVector world_pos,
 	}
 
 	UWorld* World = GWorld;
-	ARoomActor* spawnedActor = World->SpawnActor<ARoomActor>(GeneratedBP->GeneratedClass, world_pos, world_rot);
-	if (spawnedActor)
-	{
-		// Pass room dimension in order to scale collider
-		spawnedActor->InitializeRoom(3.0f);
-	}
+	AActor* spawnedActor = World->SpawnActor<AActor>(GeneratedBP->GeneratedClass, world_pos, world_rot);
 }
 
 void LevelManager::SpawnRoomActor(std::string file_path, FVector world_pos, FRotator world_rot, int room_size)
@@ -109,7 +104,7 @@ void LevelManager::_CreateRoom(Room& room)
 	float yScaled = y * cell_to_unreal_size;
 	float offset = ((float)room_size / 2.f) * cell_to_unreal_size;
 
-	SpawnBlueprintActor(room.m_file_path, { xScaled + offset, yScaled + offset, 0 }, FRotator(0, 90*(int)room.m_rot, 0));
+	SpawnRoomActor(room.m_file_path, { xScaled + offset, yScaled + offset, 0 }, FRotator(0, 90*(int)room.m_rot, 0), room_size);
 }
 
 void LevelManager::_CreateRoomsFromMap(Map map)

@@ -8,6 +8,7 @@ ARoomActor::ARoomActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	bRoomEntered = false;
 
 	// Add new root component
 	RootComponent = CreateDefaultSubobject<USceneComponent>(FName("Room"));
@@ -15,6 +16,11 @@ ARoomActor::ARoomActor()
 	EnterTrigger = CreateDefaultSubobject<UBoxComponent>(FName("Collider"));
 	// Attach box collider to root component
 	EnterTrigger->AttachTo(RootComponent);
+	// Allow room trigger to generate overlap events
+	EnterTrigger->SetGenerateOverlapEvents(true);
+	// Add overlap event to collider
+	EnterTrigger->OnComponentBeginOverlap.AddDynamic(this, &ARoomActor::onOverlapBegin);
+
 }
 
 // Called when the game starts or when spawned
@@ -28,6 +34,14 @@ void ARoomActor::BeginPlay()
 void ARoomActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
 
+// Called on collider overlap
+void ARoomActor::onOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (!bRoomEntered && otherActor && (otherActor != this) && otherComponent)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("overlap"));
+	}
 }
 
