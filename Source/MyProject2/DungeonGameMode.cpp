@@ -2,6 +2,7 @@
 
 
 #include "DungeonGameMode.h"
+#include "BaseController.h"
 #include "UObject/ConstructorHelpers.h"
 
 ADungeonGameMode::ADungeonGameMode()
@@ -12,4 +13,6 @@ ADungeonGameMode::ADungeonGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+	PlayerControllerClass = ABaseController::StaticClass();
 }

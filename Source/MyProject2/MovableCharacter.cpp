@@ -9,10 +9,12 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Engine.h"
 
 // Sets default values
 AMovableCharacter::AMovableCharacter()
 {
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Called Movable Actor Constructor.."));
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	//PrimaryActorTick.bCanEverTick = true;
 
