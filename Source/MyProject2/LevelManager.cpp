@@ -41,8 +41,38 @@ void LevelManager::SpawnBlueprintActor(std::string file_path, FVector world_pos,
 	ARoomActor* spawnedActor = World->SpawnActor<ARoomActor>(GeneratedBP->GeneratedClass, world_pos, world_rot);
 	if (spawnedActor)
 	{
+		// Pass room dimension in order to scale collider
 		spawnedActor->InitializeRoom(3.0f);
 	}
+}
+
+void LevelManager::SpawnRoomActor(std::string file_path, FVector world_pos, FRotator world_rot, int room_size)
+{
+	char buffer[100];
+	const char* root_directory = "Blueprint'/Game/Blueprints/";
+	strcpy(buffer, root_directory);
+	strcat(buffer, file_path.c_str());
+
+	// Load room using file path
+	UObject* RoomObject = Cast<UObject>(StaticLoadObject(UObject::StaticClass(), NULL, ANSI_TO_TCHAR(buffer)));
+
+	// Cast loaded room to blueprint class
+	UBlueprint* RoomBlueprint = Cast<UBlueprint>(RoomObject);
+	// break if object cannot be converted
+	if (!RoomBlueprint)
+		return;
+	// Get class data of loaded blueprint
+	UClass* RoomClass = RoomBlueprint->StaticClass();
+	// break if class data not found
+	if (RoomClass == NULL)
+		return;
+	// Get world pointer
+	UWorld* World = GWorld;
+	// Create the actor to spawn in the level
+	ARoomActor* RoomActor = World->SpawnActor<ARoomActor>(RoomBlueprint->GeneratedClass, world_pos, world_rot);
+	
+	// Initialise the room - set box collider values
+	RoomActor->InitializeRoom(room_size);
 }
 
 void LevelManager::CreateLevel(const int seed)
