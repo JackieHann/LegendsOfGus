@@ -49,17 +49,33 @@ void ARoomActor::onOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor
 		// Get room object
 		AActor* parent = overlappedComponent->GetOwner();
 		// Create list of all child actor components
-		TArray<UChildActorComponent*> components;
+		TInlineComponentArray<UChildActorComponent*> components;
 		parent->GetComponents(components);
+
 		for (auto& component : components)
 		{
-			FString componentName = component->GetName();
-			FString text;
-			// If component is a melee enemy spawner
-			if (component->GetChildActorTemplate()->ActorHasTag(tag_melee))
+			// Ignore any components that are not spawners
+			if (component->GetChildActorTemplate()->IsA(AEnemySpawner::StaticClass()))
 			{
-				text = ("Found a spawner: " + componentName);
-				UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+				AEnemySpawner* spawner = Cast<AEnemySpawner>(component->GetChildActor());
+				FString text;
+				// If component is a melee enemy spawner
+				if (spawner->ActorHasTag(tag_melee))
+				{
+					// Get position of spawner
+					FVector spawn_pos = spawner->GetActorLocation();
+
+					// debugging
+					text = ("Found a melee enemy spawner: " + component->GetName() + " at " + spawn_pos.ToString());
+					UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+
+					// Add height so enemy doesnt spawn in the ground
+					spawn_pos.Z = spawn_pos.Z + 400.0f;
+					// Get spawner rotation so enemy faces correct direction - cant tell with cube!
+					FRotator spawn_rot = spawner->GetActorRotation();
+					// Spawn an enemy at the spawners locationS
+					GetWorld()->SpawnActor<AEnemy>(AEnemy::StaticClass());
+				}
 			}
 		}	
 		bRoomEntered = true;

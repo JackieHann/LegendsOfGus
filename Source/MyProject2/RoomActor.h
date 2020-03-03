@@ -8,6 +8,7 @@
 #include "Components/SceneComponent.h"
 #include <string>
 #include "EnemySpawner.h"
+#include "Enemy.h"
 #include "RoomActor.generated.h"
 
 UCLASS()
