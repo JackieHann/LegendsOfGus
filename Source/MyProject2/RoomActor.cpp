@@ -70,11 +70,11 @@ void ARoomActor::onOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor
 					UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
 
 					// Add height so enemy doesnt spawn in the ground
-					spawn_pos.Z = spawn_pos.Z + 400.0f;
+					spawn_pos.Z = spawn_pos.Z + 200.0f;
 					// Get spawner rotation so enemy faces correct direction - cant tell with cube!
 					FRotator spawn_rot = spawner->GetActorRotation();
 					// Spawn an enemy at the spawners locationS
-					GetWorld()->SpawnActor<AEnemy>(AEnemy::StaticClass());
+					AActor* spawned_enemy = GetWorld()->SpawnActor<AEnemy>(AEnemy::StaticClass(), spawn_pos, spawn_rot);
 				}
 			}
 		}	

@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SceneComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "UObject/ConstructorHelpers.h"
 #include "Enemy.generated.h"
 
 UCLASS()
@@ -25,7 +27,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(VisibleAnywhere)
 	UCapsuleComponent* Collider;
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* Mesh;
 
 	float move_speed;
 	float damage_modifier;
