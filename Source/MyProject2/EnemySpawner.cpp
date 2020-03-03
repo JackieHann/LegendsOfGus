@@ -8,8 +8,10 @@ AEnemySpawner::AEnemySpawner()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	FGameplayTag tag = UGameplayTagsManager::Get().RequestGameplayTag("Spawner");
-	CustTags.AddTag(tag);
+	
+	// Add tag to spawner - specific to each spawner type eg. melee ranged
+	FName tagName = "Spawner.Melee";
+	Tags.Add(tagName);
 }
 
 // Called when the game starts or when spawned

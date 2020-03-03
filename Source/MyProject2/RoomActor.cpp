@@ -42,21 +42,27 @@ void ARoomActor::onOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor
 	// Need to check if the object doing the colliding is the player
 	if (!bRoomEntered && otherActor && (otherActor != this) && otherComponent)
 	{
-		// Which room has been collided with
-		FString debugText = "Overlapping:" + overlappedComponent->GetOwner()->GetName() +" with " + otherComponent->GetOwner()->GetName();
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *debugText);
+		// Tags for each type of spawner
+		FName tag_melee = "Spawner.Melee";
+		FName tag_ranged = "Spawner.Ranged";
 
-		FName tag = "Spawner";
+		// Get room object
 		AActor* parent = overlappedComponent->GetOwner();
-		TSet<UActorComponent*> components = parent->GetComponents();
+		// Create list of all child actor components
+		TArray<UChildActorComponent*> components;
+		parent->GetComponents(components);
 		for (auto& component : components)
 		{
-			if (component->ComponentHasTag(UGameplayTagsManager::Get().RequestGameplayTag("Spawner").GetTagName()))
+			FString componentName = component->GetName();
+			FString text;
+			// If component is a melee enemy spawner
+			if (component->GetChildActorTemplate()->ActorHasTag(tag_melee))
 			{
-				FString text = "Found a spawner";
+				text = ("Found a spawner: " + componentName);
 				UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
 			}
 		}	
+		bRoomEntered = true;
 	}
 }
 

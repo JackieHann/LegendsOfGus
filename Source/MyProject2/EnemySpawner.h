@@ -4,9 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "GameplayTags.h"
-#include "GameplayTagContainer.h"
-#include "GameplayTagsManager.h"
 #include "EnemySpawner.generated.h"
 
 UCLASS()
@@ -17,8 +14,6 @@ class MYPROJECT2_API AEnemySpawner : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AEnemySpawner();
-	UPROPERTY(VisibleAnywhere)
-	FGameplayTagContainer CustTags;
 
 protected:
 	// Called when the game starts or when spawned
