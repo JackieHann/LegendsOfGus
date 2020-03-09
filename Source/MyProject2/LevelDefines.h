@@ -23,6 +23,9 @@
 #define MAX_ROOM_SIZE 9
 #define MIN_ROOM_SIZE 3
 
+#define MAX_ROOM_COUNT 45
+#define MIN_ROOM_COUNT 30
+
 struct Coord
 {
 	int x;

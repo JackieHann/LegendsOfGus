@@ -95,7 +95,7 @@ struct Map
 	void GenerateFromRoomData(int seed)
 	{
 		srand(seed);
-		while (m_rooms.size() < 100)
+		while (m_rooms.size() < MIN_ROOM_COUNT)
 		{
 			m_rooms.clear();
 			m_corridors.clear();
@@ -103,8 +103,9 @@ struct Map
 
 			AddRoomFromRoomData(start_room_5x5_1door, { (MAP_DIMENSIONS_X/2) -1, (MAP_DIMENSIONS_Y / 2)-1 });
 
-			for (int i = 0; i < 300; i++)
+			for (int i = 0; i < 100; i++)
 			{
+				if (m_rooms.size() < MAX_ROOM_COUNT )
 				AddRoomsToDoor();
 			}
 		}

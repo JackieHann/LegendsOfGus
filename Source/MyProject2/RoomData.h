@@ -82,10 +82,50 @@ static RoomData corridor_room_t(
 
 	});
 
+static RoomData corridor_room_props(
+	"Rooms/Corridor_Props.Corridor_Props'", 1,
+	{
+
+	});
+
+// Add more blockages later!!!!!
 static RoomData door_room(
 	"Rooms/Blockade.Blockade'", 1,
 	{
 
+	});
+
+static RoomData room_3x3_1door(
+	"Rooms/3x3_1door_BP.3x3_1door_BP'", 3,
+	{
+		{{1, 2}, CD_SOUTH}
+	});
+
+static RoomData room_3x3_1_door_fire(
+	"Rooms/3x3_1door_fire_BP.3x3_1door_fire_BP'", 3,
+	{
+		{{1, 0}, CD_NORTH}
+	});
+
+static RoomData room_3x3_2door_R(
+	"Rooms/3x3_2door_R_BP.3x3_2door_R_BP'", 3,
+	{
+		{{2, 1}, CD_EAST },
+		{{1, 2}, CD_SOUTH}
+	});
+
+static RoomData room_3x3_2door_R_Font(
+	"Rooms/3x3_2door_R_Font_BP.3x3_2door_R_Font_BP'", 3,
+	{
+		{{2, 1}, CD_EAST },
+		{{1, 2}, CD_SOUTH}
+	});
+
+static RoomData room_3x3_2door_R_Storeroom(
+	"Rooms/3x3_2door_R_Storeroom_BP.3x3_2door_R_Storeroom_BP'", 3,
+	{
+		{{2, 1}, CD_EAST },
+		{{1, 2}, CD_SOUTH}
 	});
 
 static RoomData room_3x3_2door_straight(
@@ -93,6 +133,14 @@ static RoomData room_3x3_2door_straight(
 	{
 		{{1, 0}, CD_NORTH },
 		{{1, 2}, CD_SOUTH}
+	});
+
+static RoomData room_3x3_3door_T(
+	"Rooms/3x3_3door_T_BP.3x3_3door_T_BP'", 3,
+	{
+		{{2, 1}, CD_EAST },
+		{{1, 2}, CD_SOUTH},
+		{{0, 1}, CD_WEST}
 	});
 
 static RoomData room_3x3_4door_cross(
@@ -104,52 +152,73 @@ static RoomData room_3x3_4door_cross(
 		{{0, 1}, CD_WEST}
 	});
 
-static RoomData room_3x3_3door_T(
-	"Rooms/3x3_3door_T_BP.3x3_3door_T_BP'", 3,
+static RoomData room_3x3_4door_cross_font(
+	"Rooms/3x3_4door_Font_BP.3x3_4door_Font_BP'", 3,
 	{
-		//{{1, 0}, CD_NORTH },
+		{{1, 0}, CD_NORTH },
 		{{2, 1}, CD_EAST },
 		{{1, 2}, CD_SOUTH},
 		{{0, 1}, CD_WEST}
 	});
 
-static RoomData room_3x3_2door_R(
-	"Rooms/3x3_2door_R_BP.3x3_2door_R_BP'", 3,
-	{
-		{{2, 1}, CD_EAST },
-		{{1, 2}, CD_SOUTH}
-	});
-
-static RoomData room_3x3_1door(
-	"Rooms/3x3_1door_BP.3x3_1door_BP'", 3,
-	{
-		{{1, 2}, CD_SOUTH}
-	});
-
-static RoomData room_3x3_james(
-	"Rooms/3x3Room1.3x3Room1'", 3,
-	{
-		{{1, 0}, CD_NORTH}
-	});
-
-static RoomData room_5x5_james(
-	"Rooms/5x5Room1.5x5Room1'", 5,
+static RoomData room_5x5_3door_T(
+	"Rooms/5x5_3door_T_BP.5x5_3door_T_BP'", 5,
 	{
 		{{2, 0}, CD_NORTH},
 		{{4, 2}, CD_EAST},
 		{{0, 2}, CD_WEST}
 	});
 
-static RoomData room_7x7_james(
-	"Rooms/7x7Room1.7x7Room1'", 7,
+static RoomData room_5x5_3door_T_Storeroom(
+	"Rooms/5x5_3door_T_Storeroom_BP.5x5_3door_T_Storeroom_BP'", 5,
+	{
+		{{2, 0}, CD_NORTH},
+		{{4, 2}, CD_EAST},
+		{{0, 2}, CD_WEST}
+	});
+
+static RoomData room_5x5_3door_T_Circle(
+	"Rooms/5x5_3door_T_Circle_BP.5x5_3door_T_Circle_BP'", 5,
+	{
+		{{2, 0}, CD_NORTH},
+		{{4, 2}, CD_EAST},
+		{{0, 2}, CD_WEST}
+	});
+
+static RoomData room_7x7_3door_T_Cage(
+	"Rooms/7x7_3door_T_Cage_BP.7x7_3door_T_Cage_BP'", 7,
 	{
 		{{3, 0}, CD_NORTH},
 		{{6, 3}, CD_EAST},
 		{{0, 3}, CD_WEST}
 	});
 
-static RoomData room_9x9_james(
-	"Rooms/9x9Room1.9x9Room1'", 9,
+static RoomData room_7x7_3door_T_Pillars(
+	"Rooms/7x7_3door_T_Pillars_BP.7x7_3door_T_Pillars_BP'", 7,
+	{
+		{{3, 0}, CD_NORTH},
+		{{6, 3}, CD_EAST},
+		{{0, 3}, CD_WEST}
+	});
+
+static RoomData room_7x7_3door_T_Circle(
+	"Rooms/7x7_3door_T_Circle_BP.7x7_3door_T_Circle_BP'", 7,
+	{
+		{{3, 0}, CD_NORTH},
+		{{6, 3}, CD_EAST},
+		{{0, 3}, CD_WEST}
+	});
+
+static RoomData room_9x9_3_door_T_Storeroom(
+	"Rooms/9x9_3door_T_Storeroom_BP.9x9_3door_T_Storeroom_BP'", 9,
+	{
+		{{4, 0}, CD_NORTH},
+		{{8, 4}, CD_EAST},
+		{{0, 2}, CD_WEST}
+	});
+
+static RoomData room_9x9_3_door_T_Torture(
+	"Rooms/9x9_3door_T_Torture_BP.9x9_3door_T_Torture_BP'", 9,
 	{
 		{{4, 0}, CD_NORTH},
 		{{8, 4}, CD_EAST},
@@ -161,15 +230,23 @@ static RoomData room_9x9_james(
 //Contains reference to all potential rooms
 static std::vector<RoomData> GLOBAL_ROOM_DATA =
 {
-	room_3x3_james,
-	room_5x5_james,
-	room_7x7_james,
-	room_9x9_james,
-	room_3x3_2door_straight,
-	room_3x3_4door_cross,
-	room_3x3_3door_T,
+	room_3x3_1door,
+	room_3x3_1_door_fire,
 	room_3x3_2door_R,
-	room_3x3_1door
+	room_3x3_2door_R_Font,
+	room_3x3_2door_R_Storeroom,
+	room_3x3_2door_straight,
+	room_3x3_3door_T,
+	room_3x3_4door_cross,
+	room_3x3_4door_cross_font,
+	room_5x5_3door_T,
+	room_5x5_3door_T_Storeroom,
+	room_5x5_3door_T_Circle,
+	room_7x7_3door_T_Cage,
+	room_7x7_3door_T_Pillars,
+	room_7x7_3door_T_Circle,
+	room_9x9_3_door_T_Storeroom,
+	room_9x9_3_door_T_Torture
 };
 
 
