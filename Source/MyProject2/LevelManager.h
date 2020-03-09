@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/World.h"
 #include <string>
+#include "RoomActor.h"
 #include "Map.h"
 
 /**
@@ -22,6 +23,7 @@ public:
 	void CreateLevel(const int seed);
 
 	void SpawnBlueprintActor(std::string file_path, FVector world_pos, FRotator world_rot);
+	void SpawnRoomActor(std::string file_path, FVector world_pos, FRotator world_rot, int room_size);
 	
 	void _CreateRoomsFromMap(Map map);
 

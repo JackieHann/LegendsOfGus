@@ -4,6 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/BoxComponent.h"
+#include "Components/SceneComponent.h"
+#include <string>
+#include "EnemySpawner.h"
+#include "Enemy.h"
 #include "RoomActor.generated.h"
 
 UCLASS()
@@ -15,6 +20,10 @@ public:
 	// Sets default values for this actor's properties
 	ARoomActor();
 
+	UPROPERTY(VisibleAnywhere)
+	UBoxComponent* EnterTrigger;
+	bool bRoomEntered;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -22,5 +31,18 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION()
+	void onOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	void Test() { int i = 0; }
+
+	void InitializeRoom(float roomsize)
+	{
+		if (EnterTrigger)
+		{
+			EnterTrigger->SetBoxExtent({ roomsize * 200.f, roomsize * 200.f, 200.0f });
+		}
+	}
 
 };
