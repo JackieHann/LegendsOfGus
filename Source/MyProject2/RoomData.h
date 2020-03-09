@@ -153,7 +153,7 @@ static RoomData room_9x9_james(
 	{
 		{{4, 0}, CD_NORTH},
 		{{8, 4}, CD_EAST},
-		{{0, 4}, CD_WEST}
+		{{0, 2}, CD_WEST}
 	});
 
 
@@ -171,5 +171,6 @@ static std::vector<RoomData> GLOBAL_ROOM_DATA =
 	room_3x3_2door_R,
 	room_3x3_1door
 };
+
 
 #endif
