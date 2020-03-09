@@ -40,7 +40,7 @@ void ARoomActor::Tick(float DeltaTime)
 void ARoomActor::onOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 { 
 	// Need to check if the object doing the colliding is the player
-	if (!bRoomEntered && otherActor && (otherActor != this) && otherComponent)
+	if (!bRoomEntered && otherActor && (otherActor != this) && otherComponent && otherActor->ActorHasTag("Player"))
 	{
 		// Tags for each type of spawner
 		FName tag_melee = "Spawner.Melee";
