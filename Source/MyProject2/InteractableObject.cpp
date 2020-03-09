@@ -10,6 +10,15 @@ AInteractableObject::AInteractableObject()
 	PrimaryActorTick.bCanEverTick = true;
 	identity = GetName();
 
+	Name = "*name*";
+	Key = "F";
+	Action = "*action*";
+
+}
+
+FString AInteractableObject::GetInteractText()
+{
+	return FString::Printf(TEXT("%s : Press %s to %s"), *Name, *Key, *Action);
 }
 
 // Called when the game starts or when spawned

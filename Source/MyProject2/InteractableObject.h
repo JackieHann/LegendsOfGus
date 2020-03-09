@@ -24,4 +24,17 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
+	UPROPERTY(EditDefaultsOnly)
+	FString Name;
+
+	UPROPERTY(EditDefaultsOnly)
+	FString Action;
+
+	UPROPERTY(EditDefaultsOnly)
+	FString Key;
+
+	UFUNCTION(BlueprintCallable, Category = "Interactable")
+	FString GetInteractText();
+
 };

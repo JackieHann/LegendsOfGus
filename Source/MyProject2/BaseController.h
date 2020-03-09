@@ -17,9 +17,14 @@ class MYPROJECT2_API ABaseController : public APlayerController
 	ABaseController();
 
 public:
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	void SetTargetInteractable(AInteractableObject* obj);
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	bool HasTargetInteractable();
 
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	AInteractableObject* GetTargetInteractable();
 private:
 	AInteractableObject* m_targetted_interactable;
