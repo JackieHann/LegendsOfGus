@@ -19,7 +19,7 @@ ARoomActor::ARoomActor()
 	// Allow room trigger to generate overlap events
 	EnterTrigger->SetGenerateOverlapEvents(true);
 	// Add overlap event to collider
-	EnterTrigger->OnComponentBeginOverlap.AddDynamic(this, &ARoomActor::onOverlapBegin);
+	EnterTrigger->OnComponentBeginOverlap.AddDynamic(this, &ARoomActor::OnOverlapBegin);
 
 }
 
@@ -37,7 +37,7 @@ void ARoomActor::Tick(float DeltaTime)
 }
 
 // Called on collider overlap
-void ARoomActor::onOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ARoomActor::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 { 
 	// Need to check if the object doing the colliding is the player
 	if (!bRoomEntered && otherActor && (otherActor != this) && otherComponent && otherActor->ActorHasTag("Player"))

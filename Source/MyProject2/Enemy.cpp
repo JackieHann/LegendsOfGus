@@ -26,6 +26,9 @@ AEnemy::AEnemy() :
 	// add capsule collider to root and resize
 	Collider = CreateDefaultSubobject<UCapsuleComponent>(FName("Capsule Collider"));
 	Collider->InitCapsuleSize(100.0f, 100.0f);
+	// Add overlap event to collider
+	Collider->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnOverlapBegin);
+	Collider->OnComponentEndOverlap.AddDynamic(this, &AEnemy::OnOverlapEnd);
 	Collider->AttachTo(RootComponent);
 	
 	
@@ -47,3 +50,24 @@ void AEnemy::Tick(float DeltaTime)
 
 }
 
+// Called when something enters this actors collider
+void AEnemy::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	// Check which object has entered the collider
+	if (otherActor && (otherActor != this) && otherComponent && otherActor->ActorHasTag("Player"))
+	{
+		FString text = ("Found player!");
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+	}
+}
+
+// Called when something leaves this actors collider
+void AEnemy::OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex)
+{
+	// Check which object has left the collider
+	if (otherActor && (otherActor != this) && otherComponent && otherActor->ActorHasTag("Player"))
+	{
+		FString text = ("Player gone!");
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+	}
+}
