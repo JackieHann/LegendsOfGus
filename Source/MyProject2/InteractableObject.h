@@ -24,7 +24,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
+	//Capitalized For Visual In Editor..
 	UPROPERTY(EditDefaultsOnly)
 	FString Name;
 
@@ -33,6 +33,21 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	FString Key;
+
+	UPROPERTY(EditDefaultsOnly)
+	bool Enable_Widget;
+
+	UPROPERTY(EditDefaultsOnly)
+	FVector Widget_Offset;
+
+	UFUNCTION(BlueprintCallable, Category = "Interactable")
+	bool GetWidgetEnabled();
+
+	UFUNCTION(BlueprintCallable, Category = "Interactable")
+	FVector GetWorldPos();
+
+	UFUNCTION(BlueprintCallable, Category = "Interactable")
+	FVector GetOffset();
 
 	UFUNCTION(BlueprintCallable, Category = "Interactable")
 	FString GetInteractText();

@@ -14,6 +14,24 @@ AInteractableObject::AInteractableObject()
 	Key = "F";
 	Action = "*action*";
 
+	Widget_Offset = { 0, 0, 0 };
+	Enable_Widget = true;
+
+}
+
+bool AInteractableObject::GetWidgetEnabled()
+{
+	return this->Enable_Widget;
+}
+
+FVector AInteractableObject::GetWorldPos()
+{
+	return GetActorLocation();
+}
+
+FVector AInteractableObject::GetOffset()
+{
+	return this->Widget_Offset;
 }
 
 FString AInteractableObject::GetInteractText()

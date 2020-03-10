@@ -19,6 +19,15 @@ class MYPROJECT2_API ABaseController : public APlayerController
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	bool GetInteractableWidgetEnabled();
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	FVector2D GetInteractableScreenspaceCoord();
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	FString GetInteractableString();
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	void SetTargetInteractable(AInteractableObject* obj);
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
