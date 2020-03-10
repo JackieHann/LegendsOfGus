@@ -66,8 +66,8 @@ void ARoomActor::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor
 					FVector spawn_pos = spawner->GetActorLocation();
 
 					// debugging
-					text = ("Found a melee enemy spawner: " + component->GetName() + " at " + spawn_pos.ToString());
-					UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+					//text = ("Found a melee enemy spawner: " + component->GetName() + " at " + spawn_pos.ToString());
+					//UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
 
 					// Add height so enemy doesnt spawn in the ground
 					spawn_pos.Z = spawn_pos.Z + 200.0f;

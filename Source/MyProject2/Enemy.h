@@ -3,20 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "GameFramework/Pawn.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SceneComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"
+#include "EnemyController.h"
 #include "Enemy.generated.h"
 
 UCLASS()
-class MYPROJECT2_API AEnemy : public AActor
+class MYPROJECT2_API AEnemy : public APawn
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
+	// Sets default values for this pawn's properties
 	AEnemy();
 
 protected:

@@ -21,6 +21,7 @@ AEnemy::AEnemy() :
 	// set affected by gravity
 	Mesh->SetSimulatePhysics(true);
 	Mesh->SetEnableGravity(true);
+	Mesh->SetCanEverAffectNavigation(false);
 	// set mesh as root component
 	RootComponent = Mesh;
 	// add capsule collider to root and resize
@@ -30,17 +31,16 @@ AEnemy::AEnemy() :
 	Collider->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnOverlapBegin);
 	Collider->OnComponentEndOverlap.AddDynamic(this, &AEnemy::OnOverlapEnd);
 	Collider->AttachTo(RootComponent);
-	
-	
 
-	
+	// Set enemy controller	
+	AIControllerClass = AEnemyController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::Spawned;
 }
 
 // Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
-	Super::BeginPlay();
-	
+	Super::BeginPlay();	
 }
 
 // Called every frame
