@@ -17,8 +17,12 @@ ATestActor::ATestActor()
 void ATestActor::BeginPlay()
 {
 	Super::BeginPlay();
-
+	// Get world pointer for level manager
+	UWorld* p_world = GetWorld();
 	GetLevelManager()->CreateLevel(time(0));
+	
+	// Get navmesh bounds volume
+	
 }
 
 // Called every frame

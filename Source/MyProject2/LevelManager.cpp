@@ -61,9 +61,8 @@ void LevelManager::SpawnRoomActor(std::string file_path, FVector world_pos, FRot
 	// break if class data not found
 	if (RoomClass == NULL)
 		return;
-	// Get world pointer
-	UWorld* World = GWorld;
 	// Create the actor to spawn in the level
+	UWorld* World = GWorld;
 	ARoomActor* RoomActor = World->SpawnActor<ARoomActor>(RoomBlueprint->GeneratedClass, world_pos, world_rot);
 	
 	// Initialise the room - set box collider values
@@ -80,13 +79,12 @@ void LevelManager::_CreateLevel(const int seed)
 	//function that creates and stores the level, generated via the seed.
 	Map new_map({ MAP_DIMENSIONS_X, MAP_DIMENSIONS_Y });
 
-	// Spawn initial rooms
+	// generate all the rooms to be added
 	new_map.GenerateFromRoomData(1);
 	new_map.ConnectCorridors();
 
+	// add all rooms to the level
 	_CreateRoomsFromMap(new_map);
-
-
 }
 
 void LevelManager::_CreateRoom(Room& room)
