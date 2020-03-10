@@ -4,27 +4,16 @@
 #include "Enemy.h"
 
 // Constructors
-AEnemy::AEnemy() :
+AEnemy::AEnemy(const FObjectInitializer& ObjectInitializer) :
 	move_speed(1.0f),
 	damage_modifier(1.0f),
 	health(1.0f)
 {
-	// Get cube mesh -  will be changed to actual model, only need to do once as mesh doesnt change for different enemies
-	static ConstructorHelpers::FObjectFinder<UStaticMesh>MeshAsset(TEXT("StaticMesh'/Engine/BasicShapes/Cube.Cube'"));
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	// add mesh
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Enemy Mesh"));
-	UStaticMesh* staticMesh = MeshAsset.Object;
-	Mesh->SetStaticMesh(staticMesh);
-	// set affected by gravity
-	Mesh->SetSimulatePhysics(true);
-	Mesh->SetEnableGravity(true);
-	Mesh->SetCanEverAffectNavigation(false);
-	// set mesh as root component
-	RootComponent = Mesh;
 	// add capsule collider to root and resize
+	// NEEDS MOVING TO POST CONSTRUCTOR INITIALIZE FUNCTION
 	Collider = CreateDefaultSubobject<UCapsuleComponent>(FName("Capsule Collider"));
 	Collider->InitCapsuleSize(100.0f, 100.0f);
 	// Add overlap event to collider

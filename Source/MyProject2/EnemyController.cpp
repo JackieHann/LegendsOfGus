@@ -9,7 +9,6 @@ void AEnemyController::BeginPlay()
 	player = UGameplayStatics::GetPlayerPawn(this, 0);
 	FString text = ("New enemy controller - " + player->GetName());
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
-	GoToPlayer();
 }
 
 void AEnemyController::Idle()

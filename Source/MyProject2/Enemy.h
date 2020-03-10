@@ -3,22 +3,22 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
+#include "GameFramework/Character.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SceneComponent.h"
-#include "Components/StaticMeshComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "EnemyController.h"
 #include "Enemy.generated.h"
 
 UCLASS()
-class MYPROJECT2_API AEnemy : public APawn
+class MYPROJECT2_API AEnemy : public ACharacter
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this pawn's properties
-	AEnemy();
+	// Sets default values for this character's properties
+	AEnemy(const FObjectInitializer& ObjectInitializer);
 
 protected:
 	// Called when the game starts or when spawned
@@ -35,10 +35,11 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	UCapsuleComponent* Collider;
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* Mesh;
 
+	UPROPERTY()
 	float move_speed;
+	UPROPERTY()
 	float damage_modifier;
+	UPROPERTY()
 	float health;
 };

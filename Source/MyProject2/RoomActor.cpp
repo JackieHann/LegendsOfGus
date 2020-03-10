@@ -74,7 +74,9 @@ void ARoomActor::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor
 					// Get spawner rotation so enemy faces correct direction - cant tell with cube!
 					FRotator spawn_rot = spawner->GetActorRotation();
 					// Spawn an enemy at the spawners locationS
-					AActor* spawned_enemy = GetWorld()->SpawnActor<AEnemy>(AEnemy::StaticClass(), spawn_pos, spawn_rot);
+					const char* melee_enemy_file_path = "Blueprint'/Game/Blueprints/Enemies/Enemy_BP.Enemy_BP'";
+					UObject* blueprint = Cast<UObject>(StaticLoadObject(UObject::StaticClass(), NULL, ANSI_TO_TCHAR(melee_enemy_file_path)));
+					ACharacter* spawned_enemy = GetWorld()->SpawnActor<ACharacter>((Cast<UBlueprint>(blueprint))->GeneratedClass, spawn_pos, spawn_rot);
 				}
 			}
 		}	
