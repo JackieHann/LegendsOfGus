@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "Kismet/GameplayStatics.h"
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISenseConfig_Sight.h"
 #include "EnemyController.generated.h"
 
 UCLASS()
@@ -12,15 +13,32 @@ class MYPROJECT2_API AEnemyController : public AAIController
 {
 	GENERATED_BODY()
 public:
-	void BeginPlay() override;
-private:
-	UPROPERTY()
-	AActor* player;
+	// Constructor
+	AEnemyController();
+
+	virtual void BeginPlay() override;
+	virtual void OnPossess(APawn* Pawn) override;
+	virtual void Tick(float deltaTime) override;
+	virtual FRotator GetControlRotation() const override;
+
 	UFUNCTION()
-	void Idle();
-	UFUNCTION()
-	void GoToPlayer();
-	UFUNCTION()
-	void AttackPlayer();
+	void OnPawnDetected(const TArray<AActor*> &DetectedPawns);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+	float AISightRadius = 500;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+	float AISightAge = 5.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+	float AILoseSightRadius = AISightRadius + 50.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+	float AIFieldOfView = 90.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = AI)
+	UAISenseConfig_Sight* SightConfig;
+
 	
+private:
 };

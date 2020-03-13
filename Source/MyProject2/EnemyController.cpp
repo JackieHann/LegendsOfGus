@@ -3,29 +3,67 @@
 
 #include "EnemyController.h"
 
+// Constructor
+AEnemyController::AEnemyController()
+{
+	PrimaryActorTick.bCanEverTick = true;
+
+	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
+	SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
+
+	SightConfig->SightRadius = AISightRadius;
+	SightConfig->LoseSightRadius = AILoseSightRadius;
+	SightConfig->PeripheralVisionAngleDegrees = AIFieldOfView;
+	SightConfig->SetMaxAge(AISightAge);
+
+	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
+	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
+
+	GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
+	GetPerceptionComponent()->OnPerceptionUpdated.AddDynamic(this, &AEnemyController::OnPawnDetected);
+	GetPerceptionComponent()->ConfigureSense(*SightConfig);
+}
+
 void AEnemyController::BeginPlay()
 {
+	Super::BeginPlay();
+
+	if (GetPerceptionComponent() != nullptr)
+	{ 
+		UE_LOG(LogTemp, Warning, TEXT("All Systems Set"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Enemy controller broke!"));
+	}
+
 	// Get player actor
-	player = UGameplayStatics::GetPlayerPawn(this, 0);
-	FString text = ("New enemy controller - " + player->GetName());
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+	//player = UGameplayStatics::GetPlayerPawn(this, 0);
+	//FString text = ("New enemy controller - " + player->GetName());
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
 }
 
-void AEnemyController::Idle()
+void AEnemyController::OnPossess(APawn* Pawn)
 {
-	FString text = ("Enemy idling...");
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+	Super::OnPossess(Pawn);
 }
 
-void AEnemyController::GoToPlayer()
+void AEnemyController::Tick(float deltaTime)
 {
-	FString text = ("Enemy following player...");
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
-	MoveToActor(player);
+	Super::Tick(deltaTime);
 }
 
-void AEnemyController::AttackPlayer()
+FRotator AEnemyController::GetControlRotation() const
 {
-	FString text = ("Enemy attacking player...");
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+	if (GetPawn() == nullptr)
+	{
+		return FRotator(0.0f, 0.0f, 0.0f);
+	}
+	return FRotator(0.0f, GetPawn()->GetActorRotation().Yaw, 0.0f);
+}
+
+void AEnemyController::OnPawnDetected(const TArray<AActor*>& DetectedPawns)
+{
+
 }

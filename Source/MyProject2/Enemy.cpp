@@ -12,14 +12,12 @@ AEnemy::AEnemy(const FObjectInitializer& ObjectInitializer) :
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	// add capsule collider to root and resize
-	// NEEDS MOVING TO POST CONSTRUCTOR INITIALIZE FUNCTION
-	Collider = CreateDefaultSubobject<UCapsuleComponent>(FName("Capsule Collider"));
-	Collider->InitCapsuleSize(100.0f, 100.0f);
-	// Add overlap event to collider
-	Collider->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnOverlapBegin);
-	Collider->OnComponentEndOverlap.AddDynamic(this, &AEnemy::OnOverlapEnd);
-	Collider->AttachTo(RootComponent);
+	// add capsule collider
+	//Collider = CreateDefaultSubobject<UCapsuleComponent>(FName("Capsule Collider"));
+	//Collider->AttachTo(RootComponent);
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 600.0f, 0.0f);
 
 	// Set enemy controller	
 	AIControllerClass = AEnemyController::StaticClass();
@@ -30,6 +28,14 @@ AEnemy::AEnemy(const FObjectInitializer& ObjectInitializer) :
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();	
+	/*
+	if (Collider)
+	{ 
+		Collider->InitCapsuleSize(100.0f, 100.0f);
+		Collider->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnOverlapBegin);
+		Collider->OnComponentEndOverlap.AddDynamic(this, &AEnemy::OnOverlapEnd);
+	}
+	*/
 }
 
 // Called every frame
@@ -39,6 +45,7 @@ void AEnemy::Tick(float DeltaTime)
 
 }
 
+/*
 // Called when something enters this actors collider
 void AEnemy::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -60,3 +67,4 @@ void AEnemy::OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* othe
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
 	}
 }
+*/
