@@ -2,19 +2,23 @@
 
 
 #include "Enemy.h"
+#include "EnemyController.h"
+#include "EnemyWaypoint.h"
+
 
 // Constructors
-AEnemy::AEnemy(const FObjectInitializer& ObjectInitializer) :
-	move_speed(1.0f),
-	damage_modifier(1.0f),
-	health(1.0f)
+AEnemy::AEnemy(const FObjectInitializer& ObjectInitializer)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// add capsule collider
-	//Collider = CreateDefaultSubobject<UCapsuleComponent>(FName("Capsule Collider"));
-	//Collider->AttachTo(RootComponent);
+	Collider = CreateDefaultSubobject<UCapsuleComponent>(FName("Capsule Collider"));
+	Collider->AttachTo(RootComponent);
+
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 600.0f, 0.0f);
@@ -28,43 +32,61 @@ AEnemy::AEnemy(const FObjectInitializer& ObjectInitializer) :
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();	
-	/*
 	if (Collider)
 	{ 
 		Collider->InitCapsuleSize(100.0f, 100.0f);
 		Collider->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnOverlapBegin);
 		Collider->OnComponentEndOverlap.AddDynamic(this, &AEnemy::OnOverlapEnd);
 	}
-	*/
 }
 
 // Called every frame
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	// Set next waypoint to be a random one in the room if there isnt one set
+	if ((SpawnRoom != nullptr) && (SpawnRoom->waypoints.Num() != 0) && NextWaypoint == nullptr)
+	{
+		NextWaypoint = SpawnRoom->getRandomStartWaypoint();
+	}
 }
 
-/*
+
 // Called when something enters this actors collider
 void AEnemy::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	// Check which object has entered the collider
-	if (otherActor && (otherActor != this) && otherComponent && otherActor->ActorHasTag("Player"))
+	if (otherActor && (otherActor != this) && otherComponent)
 	{
-		FString text = ("Found player!");
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+		if (otherActor->ActorHasTag("Player"))
+		{
+			FString text = ("Found player!");
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+		}
+		else if (otherActor->ActorHasTag("Waypoint"))
+		{
+			FString text = ("Found waypoint: " + otherActor->GetName());
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+		}
 	}
 }
+
 
 // Called when something leaves this actors collider
 void AEnemy::OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex)
 {
 	// Check which object has left the collider
-	if (otherActor && (otherActor != this) && otherComponent && otherActor->ActorHasTag("Player"))
+	if (otherActor && (otherActor != this) && otherComponent)
 	{
-		FString text = ("Player gone!");
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+		if (otherActor->ActorHasTag("Player"))
+		{
+			FString text = ("Player gone!");
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+		}
+		else if (otherActor->ActorHasTag("Waypoint"))
+		{
+			FString text = ("Left waypoint: " + otherActor->GetName());
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+		}
 	}
 }
-*/

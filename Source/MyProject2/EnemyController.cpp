@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "EnemyController.h"
+#include "EnemyWaypoint.h"
+#include "Enemy.h"
 
 // Constructor
 AEnemyController::AEnemyController()
@@ -37,11 +38,6 @@ void AEnemyController::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Enemy controller broke!"));
 	}
-
-	// Get player actor
-	//player = UGameplayStatics::GetPlayerPawn(this, 0);
-	//FString text = ("New enemy controller - " + player->GetName());
-	//UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
 }
 
 void AEnemyController::OnPossess(APawn* Pawn)
@@ -52,6 +48,12 @@ void AEnemyController::OnPossess(APawn* Pawn)
 void AEnemyController::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
+
+	AEnemy* enemy = Cast<AEnemy>(GetPawn());
+	if (enemy->NextWaypoint != nullptr)
+	{
+		MoveToActor(enemy->NextWaypoint, 1.0f);
+	}
 }
 
 FRotator AEnemyController::GetControlRotation() const

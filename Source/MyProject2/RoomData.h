@@ -21,8 +21,8 @@ struct RoomData
 
 	RoomData(std::string str, int size, std::vector<Door> doors) :
 		m_dimensions({ size, size }),
-		m_doors(doors),
-		m_file_path(str)
+		m_file_path(str),
+		m_doors(doors)
 	{
 	}
 

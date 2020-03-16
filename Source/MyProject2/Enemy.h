@@ -6,7 +6,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "EnemyController.h"
+#include "RoomActor.h"
 #include "Enemy.generated.h"
 
 UCLASS()
@@ -18,6 +18,15 @@ public:
 	// Sets default values for this character's properties
 	AEnemy(const FObjectInitializer& ObjectInitializer);
 
+	UPROPERTY(VisibleAnywhere)
+	UCapsuleComponent* Collider;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class AEnemyWaypoint* NextWaypoint;
+
+	UPROPERTY(EditAnywhere)
+	ARoomActor* SpawnRoom;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -26,18 +35,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	//UFUNCTION()
-	//void OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	//UFUNCTION()
-	//void OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex);
-
-	//UPROPERTY(VisibleAnywhere)
-	//UCapsuleComponent* Collider;
-
-	UPROPERTY()
-	float move_speed;
-	UPROPERTY()
-	float damage_modifier;
-	UPROPERTY()
-	float health;
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	void OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex);
 };
