@@ -2,6 +2,7 @@
 
 
 #include "InteractableObject.h"
+#include "BaseController.h"
 
 // Sets default values
 AInteractableObject::AInteractableObject()
@@ -16,7 +17,13 @@ AInteractableObject::AInteractableObject()
 
 	Widget_Offset = { 0, 0, 0 };
 	Enable_Widget = true;
+	Delete_On_Interact = true;
 
+}
+
+void AInteractableObject::Interact(ABaseController* controller)
+{
+	//Skeleton to override
 }
 
 bool AInteractableObject::GetWidgetEnabled()

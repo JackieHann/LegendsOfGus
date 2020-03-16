@@ -7,6 +7,7 @@
 
 #include "InteractableObject.h"
 #include "AutoLootObject.h"
+#include "BasicLootObject.h"
 
 // Sets default values
 AInteractableCharacter::AInteractableCharacter()
@@ -19,10 +20,36 @@ AInteractableCharacter::AInteractableCharacter()
 	m_loot_collider->SetSphereRadius(150.f); //150 seems reasonable?
 }
 
+void AInteractableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	// Set up gameplay key bindings
+	check(PlayerInputComponent);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AInteractableCharacter::Interact);
+
+}
+
+void AInteractableCharacter::Interact()
+{
+	ABaseController* IController = Cast<ABaseController>(GetController());
+	if (IController && IController->HasTargetInteractable())
+	{
+		ABasicLootObject* interactable = Cast<ABasicLootObject>(IController->GetTargetInteractable());
+		if (interactable)
+		{
+			//Pickup code goes here
+			interactable->Interact(IController);
+		}
+	}
+}
+
+
 void AInteractableCharacter::Tick(float delta_time)
 {
 	Super::Tick(delta_time);
 
+	//Can these both be merged into one?
 	UpdateManualPickup();
 	UpdateAutomaticPickup();
 }

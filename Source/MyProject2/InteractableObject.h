@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "InteractableObject.generated.h"
 
+class ABaseController;
+
 UCLASS()
 class MYPROJECT2_API AInteractableObject : public AActor
 {
@@ -24,6 +26,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	//What happens on interaction?
+	virtual void Interact(ABaseController* controller);
+
 	//Capitalized For Visual In Editor..
 	UPROPERTY(EditDefaultsOnly)
 	FString Name;
@@ -39,6 +44,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	FVector Widget_Offset;
+
+	UPROPERTY(EditDefaultsOnly)
+	bool Delete_On_Interact;
 
 	UFUNCTION(BlueprintCallable, Category = "Interactable")
 	bool GetWidgetEnabled();

@@ -4,12 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "InteractableObject.h"
 #include "BaseController.generated.h"
 
 /**
  * 
  */
+
+class AInteractableObject;
+
 UCLASS()
 class MYPROJECT2_API ABaseController : public APlayerController
 {

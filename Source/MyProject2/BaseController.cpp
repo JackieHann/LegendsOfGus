@@ -2,6 +2,7 @@
 
 
 #include "BaseController.h"
+#include "InteractableObject.h"
 
 ABaseController::ABaseController()
 	: m_targetted_interactable(nullptr)

@@ -30,9 +30,12 @@ public:
 	AInteractableCharacter();
 
 	virtual void Tick(float delta_time) override;
-
+	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent);
 private:
 	void UpdateManualPickup();
 	void UpdateAutomaticPickup();
+
+public:
+	void Interact();
 	
 };
