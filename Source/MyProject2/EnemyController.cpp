@@ -3,6 +3,8 @@
 #include "EnemyController.h"
 #include "EnemyWaypoint.h"
 #include "Enemy.h"
+#include "Kismet/GameplayStatics.h"
+#include "MovableCharacter.h"
 
 // Constructor
 AEnemyController::AEnemyController()
@@ -48,11 +50,20 @@ void AEnemyController::OnPossess(APawn* Pawn)
 void AEnemyController::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
-
 	AEnemy* enemy = Cast<AEnemy>(GetPawn());
-	if (enemy->NextWaypoint != nullptr)
+
+	if (DistanceToPlayer > AISightRadius)
+	{
+		bIsPlayerDetected = false;
+	}
+
+	if ((enemy->NextWaypoint != nullptr) && (bIsPlayerDetected == false))
 	{
 		MoveToActor(enemy->NextWaypoint, 1.0f);
+	}
+	else if (bIsPlayerDetected == true)
+	{
+		MoveToActor(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0), 1.0f);
 	}
 }
 
@@ -67,5 +78,12 @@ FRotator AEnemyController::GetControlRotation() const
 
 void AEnemyController::OnPawnDetected(const TArray<AActor*>& DetectedPawns)
 {
-
+	for (int i = 0; i < DetectedPawns.Num(); i++)
+	{
+		if (!(DetectedPawns[i]->IsA(AEnemy::StaticClass())))
+		{ 
+			DistanceToPlayer = GetPawn()->GetDistanceTo(DetectedPawns[i]);
+			bIsPlayerDetected = true;
+		}
+	}
 }
