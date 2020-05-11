@@ -3,8 +3,8 @@
 #include <cstdlib>
 //File that contains all generation data that can be tweaked by the artists for UX
 
-#define MAP_DIMENSIONS_X 100
-#define MAP_DIMENSIONS_Y 100
+#define MAP_DIMENSIONS_X 75
+#define MAP_DIMENSIONS_Y 75
 
 #define START_ROOM_DIMENSIONS_X 3
 #define START_ROOM_DIMENSIONS_Y 3

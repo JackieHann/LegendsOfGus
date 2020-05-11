@@ -3,21 +3,29 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Components/SceneComponent.h"
-#include "Components/StaticMeshComponent.h"
-#include "UObject/ConstructorHelpers.h"
+#include "RoomActor.h"
 #include "Enemy.generated.h"
 
 UCLASS()
-class MYPROJECT2_API AEnemy : public AActor
+class MYPROJECT2_API AEnemy : public ACharacter
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
-	AEnemy();
+	// Sets default values for this character's properties
+	AEnemy(const FObjectInitializer& ObjectInitializer);
+
+	UPROPERTY(VisibleAnywhere)
+	UCapsuleComponent* Collider;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class AEnemyWaypoint* NextWaypoint;
+
+	UPROPERTY(EditAnywhere)
+	ARoomActor* SpawnRoom;
 
 protected:
 	// Called when the game starts or when spawned
@@ -27,12 +35,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(VisibleAnywhere)
-	UCapsuleComponent* Collider;
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* Mesh;
-
-	float move_speed;
-	float damage_modifier;
-	float health;
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	void OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex);
 };

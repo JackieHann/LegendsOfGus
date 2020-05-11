@@ -2,6 +2,8 @@
 
 
 #include "RoomActor.h"
+#include "EnemySpawner.h"
+#include "Enemy.h"
 
 // Sets default values
 ARoomActor::ARoomActor()
@@ -19,7 +21,7 @@ ARoomActor::ARoomActor()
 	// Allow room trigger to generate overlap events
 	EnterTrigger->SetGenerateOverlapEvents(true);
 	// Add overlap event to collider
-	EnterTrigger->OnComponentBeginOverlap.AddDynamic(this, &ARoomActor::onOverlapBegin);
+	EnterTrigger->OnComponentBeginOverlap.AddDynamic(this, &ARoomActor::OnOverlapBegin);
 
 }
 
@@ -28,6 +30,28 @@ void ARoomActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Get list of all components of this room
+	TInlineComponentArray<UChildActorComponent*> components;
+	GetComponents(components);
+
+	// add wayoints to waypoint list
+	for (auto& component : components)
+	{
+		// For all waypoint components
+		if (component->GetChildActorTemplate()->IsA(AEnemyWaypoint::StaticClass()))
+		{
+			AEnemyWaypoint* waypoint = Cast<AEnemyWaypoint>(component->GetChildActor());
+			// Add waypoints to list of possible waypoints - dont add THIS waypoint
+			//if (*waypoint != this)
+			waypoints.Add(waypoint);
+		}
+	}
+
+	for (auto& waypoint : waypoints)
+	{
+		// Setup possible next waypoints for each waypoint
+		waypoint->addPossibleWaypoints(waypoints);
+	}
 }
 
 // Called every frame
@@ -37,7 +61,7 @@ void ARoomActor::Tick(float DeltaTime)
 }
 
 // Called on collider overlap
-void ARoomActor::onOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ARoomActor::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 { 
 	// Need to check if the object doing the colliding is the player
 	if (!bRoomEntered && otherActor && (otherActor != this) && otherComponent && otherActor->ActorHasTag("Player"))
@@ -65,20 +89,26 @@ void ARoomActor::onOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor
 					// Get position of spawner
 					FVector spawn_pos = spawner->GetActorLocation();
 
-					// debugging
-					text = ("Found a melee enemy spawner: " + component->GetName() + " at " + spawn_pos.ToString());
-					UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
-
 					// Add height so enemy doesnt spawn in the ground
 					spawn_pos.Z = spawn_pos.Z + 200.0f;
 					// Get spawner rotation so enemy faces correct direction - cant tell with cube!
 					FRotator spawn_rot = spawner->GetActorRotation();
 					// Spawn an enemy at the spawners locationS
-					AActor* spawned_enemy = GetWorld()->SpawnActor<AEnemy>(AEnemy::StaticClass(), spawn_pos, spawn_rot);
+					const char* melee_enemy_file_path = "Blueprint'/Game/Blueprints/Enemies/Enemy_BP.Enemy_BP'";
+					UObject* blueprint = Cast<UObject>(StaticLoadObject(UObject::StaticClass(), NULL, ANSI_TO_TCHAR(melee_enemy_file_path)));
+					ACharacter* spawned_character = GetWorld()->SpawnActor<ACharacter>((Cast<UBlueprint>(blueprint))->GeneratedClass, spawn_pos, spawn_rot);
+					AEnemy* spawned_enemy = Cast<AEnemy>(spawned_character);
+					spawned_enemy->SpawnRoom = this;
 				}
 			}
 		}	
 		bRoomEntered = true;
 	}
+}
+
+AEnemyWaypoint* ARoomActor::getRandomStartWaypoint() 
+{
+	int32 index = FMath::RandRange(0, waypoints.Num() - 1);
+	return waypoints[index];
 }
 

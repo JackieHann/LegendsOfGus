@@ -7,8 +7,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/SceneComponent.h"
 #include <string>
-#include "EnemySpawner.h"
-#include "Enemy.h"
+#include "EnemyWaypoint.h"
 #include "RoomActor.generated.h"
 
 UCLASS()
@@ -23,7 +22,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* EnterTrigger;
 	bool bRoomEntered;
-
+	
+	UPROPERTY()
+	TArray<AEnemyWaypoint*> waypoints;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -33,9 +34,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-	void onOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	void Test() { int i = 0; }
+	UFUNCTION()
+	AEnemyWaypoint* getRandomStartWaypoint();
 
 	void InitializeRoom(float roomsize)
 	{
