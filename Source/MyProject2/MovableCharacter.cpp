@@ -9,10 +9,13 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Engine.h"
 
 // Sets default values
 AMovableCharacter::AMovableCharacter()
 {
+	/*
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Called Movable Actor Constructor.."));
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	//PrimaryActorTick.bCanEverTick = true;
 
@@ -44,7 +47,7 @@ AMovableCharacter::AMovableCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
+	*/
 }
 
 // Called when the game starts or when spawned
@@ -67,7 +70,7 @@ void AMovableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	// Set up gameplay key bindings
-	check(PlayerInputComponent);
+	/*check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
@@ -77,11 +80,11 @@ void AMovableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("TurnRate", this, &AMovableCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis("LookUpRate", this, &AMovableCharacter::LookUpAtRate);
+	PlayerInputComponent->BindAxis("LookUpRate", this, &AMovableCharacter::LookUpAtRate);*/
 
 }
 
-void AMovableCharacter::TurnAtRate(float Rate)
+/*void AMovableCharacter::TurnAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
@@ -120,5 +123,5 @@ void AMovableCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
-}
+}*/
 
