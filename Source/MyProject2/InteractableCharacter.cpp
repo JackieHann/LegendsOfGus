@@ -41,6 +41,11 @@ void AInteractableCharacter::Interact()
 			//Pickup code goes here
 			interactable->Interact(IController);
 		}
+		else
+		{
+			AInteractableObject* interactable_obj = Cast<AInteractableObject>(IController->GetTargetInteractable());
+			if (interactable_obj) interactable_obj->Interact(IController);
+		}
 	}
 }
 

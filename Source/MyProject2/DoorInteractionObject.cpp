@@ -10,13 +10,12 @@ ADoorInteractionObject::ADoorInteractionObject()
 
 void ADoorInteractionObject::Interact(ABaseController* controller)
 {
-	AInteractableObject::Interact(controller);
+	AManualLootObject::Interact(controller);
 
 	//Base interaction just makes the object disappear
 	//Any inherited objects can have custom
 
-	//FString str = "Interacted With Item [ " + this->GetName() + " ]";
-	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, str);
+	
 
 	if (Opening == false)
 	{
@@ -41,7 +40,7 @@ void ADoorInteractionObject::Tick(float DeltaTime)
 	{
 		DoorCurrentRotation = this->GetActorRotation().Yaw;
 
-		AddRotation = DeltaTime * 80;
+		AddRotation = 90;
 		FRotator NewRotation = FRotator(0.0f, AddRotation, 0.0f);
 		this->SetActorRelativeRotation(FQuat(NewRotation), false, 0, ETeleportType::None);
 	}
@@ -49,7 +48,7 @@ void ADoorInteractionObject::Tick(float DeltaTime)
 	if(Closing)
 	{
 		DoorCurrentRotation = this->GetActorRotation().Yaw;
-		AddRotation = DeltaTime * -80;
+		AddRotation = DeltaTime * -9;
 		FRotator NewRotation = FRotator(0.0f, AddRotation, 0.0f);
 		this->SetActorRelativeRotation(FQuat(NewRotation), false, 0, ETeleportType::None);
 	}

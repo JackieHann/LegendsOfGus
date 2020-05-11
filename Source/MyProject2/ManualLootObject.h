@@ -16,7 +16,7 @@ class MYPROJECT2_API AManualLootObject : public AInteractableObject
 	GENERATED_BODY()
 
 public:
-	void Interact(ABaseController* controller);
+	virtual void Interact(ABaseController* controller) override;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

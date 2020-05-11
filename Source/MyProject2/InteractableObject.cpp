@@ -24,6 +24,8 @@ AInteractableObject::AInteractableObject()
 void AInteractableObject::Interact(ABaseController* controller)
 {
 	//Skeleton to override
+	FString str = "Interacted With Item [ " + this->GetName() + " ]";
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, str);
 }
 
 bool AInteractableObject::GetWidgetEnabled()
