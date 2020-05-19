@@ -20,6 +20,7 @@ class MYPROJECT2_API ABaseController : public APlayerController
 
 public:
 
+	//Interactable Functions
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	bool GetInteractableWidgetEnabled();
 
@@ -37,6 +38,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	AInteractableObject* GetTargetInteractable();
+
+
+
+
 private:
 	AInteractableObject* m_targetted_interactable;
 };

@@ -27,7 +27,7 @@ void AInteractableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AInteractableCharacter::Interact);
+	PlayerInputComponent->BindAction("Interact2", IE_Pressed, this, &AInteractableCharacter::Interact);
 
 }
 

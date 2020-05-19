@@ -32,12 +32,18 @@ public:
 	//Capitalized For Visual In Editor..
 	UPROPERTY(EditDefaultsOnly)
 	FString Name;
+	UPROPERTY(EditDefaultsOnly)
+	bool Enable_Name_Tooltip;
 
 	UPROPERTY(EditDefaultsOnly)
 	FString Action;
+	UPROPERTY(EditDefaultsOnly)
+	bool Enable_Action_Tooltip;
 
 	UPROPERTY(EditDefaultsOnly)
 	FString Key;
+	UPROPERTY(EditDefaultsOnly)
+	bool Enable_Key_Tooltip;
 
 	UPROPERTY(EditDefaultsOnly)
 	bool Enable_Widget;
@@ -58,6 +64,6 @@ public:
 	FVector GetOffset();
 
 	UFUNCTION(BlueprintCallable, Category = "Interactable")
-	FString GetInteractText();
+	virtual FString GetInteractText();
 
 };

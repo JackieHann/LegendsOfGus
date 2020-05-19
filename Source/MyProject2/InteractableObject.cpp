@@ -12,8 +12,13 @@ AInteractableObject::AInteractableObject()
 	identity = GetName();
 
 	Name = "*name*";
+	Enable_Name_Tooltip = true;
+
 	Key = "F";
+	Enable_Key_Tooltip = true;
+
 	Action = "*action*";
+	Enable_Action_Tooltip = true;
 
 	Widget_Offset = { 0, 0, 0 };
 	Enable_Widget = true;
@@ -45,7 +50,14 @@ FVector AInteractableObject::GetOffset()
 
 FString AInteractableObject::GetInteractText()
 {
-	return FString::Printf(TEXT("%s : Press %s to %s"), *Name, *Key, *Action);
+
+	FString name_section	= (this->Enable_Name_Tooltip	? FString::Printf(TEXT("%s : "), *Name) : "");
+	FString key_section		= (this->Enable_Key_Tooltip		? FString::Printf(TEXT("Press %s to "), *Key) : "");
+	FString action_section	= (this->Enable_Action_Tooltip	? FString::Printf(TEXT("%s"), *Action) : "");
+
+	//if (this->Enable_Action_Tooltip && this->Enable_Name_Tooltip && this->Enable_Key_Tooltip)
+	return name_section + key_section + action_section;
+	//   FString::Printf(TEXT("%s : Press %s to %s"), *Name, *Key, *Action);
 }
 
 // Called when the game starts or when spawned
