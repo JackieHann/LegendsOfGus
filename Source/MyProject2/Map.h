@@ -6,11 +6,13 @@
 
 struct Map
 {
+	
+
 	Coord m_dimensions;
 	std::vector<Room> m_rooms;
 	std::vector<Room> m_corridors;
 	std::vector<Room> m_blockages;
-
+	bool has_placed_boss_Room = false;
 	//std::vector<int> potential_corridor_lengths = { MIN_CORRIDOR_LENGTH, MIN_CORRIDOR_LENGTH, MIN_CORRIDOR_LENGTH, MIN_CORRIDOR_LENGTH + 1, MIN_CORRIDOR_LENGTH + 1, MAX_CORRIDOR_LENGTH };
 
 	std::vector<int> potential_corridor_lengths = { MIN_CORRIDOR_LENGTH,
@@ -95,7 +97,7 @@ struct Map
 	void GenerateFromRoomData(int seed)
 	{
 		srand(seed);
-		while (m_rooms.size() < MIN_ROOM_COUNT)
+		while (m_rooms.size() < MIN_ROOM_COUNT || !has_placed_boss_Room)
 		{
 			m_rooms.clear();
 			m_corridors.clear();
@@ -106,7 +108,7 @@ struct Map
 			for (int i = 0; i < 100; i++)
 			{
 				if (m_rooms.size() < MAX_ROOM_COUNT )
-				AddRoomsToDoor();
+					AddRoomsToDoor();
 			}
 		}
 	}
@@ -120,6 +122,14 @@ struct Map
 
 		std::vector<int> potential_rotations = { 0, 1, 2, 3 };
 		
+		bool is_attempting_to_add_boss_room = false;
+		if (!has_placed_boss_Room && m_rooms.size() > 6 && RandomIntInRange(0, 5) > 4)
+		{
+			potential_rooms.clear();
+			potential_rooms.push_back(room_9x9_3_door_T_Boss);
+			is_attempting_to_add_boss_room = true;
+		}
+
 		bool has_added_room = false;
 		for (int curr_room_idx = 0; curr_room_idx < m_rooms.size() && !has_added_room; curr_room_idx++)
 		{
@@ -184,13 +194,19 @@ struct Map
 								for (int i = 0; i < corridor_length; i++)
 								{
 									Coord potentialCorridorPos = { curr_door_world_pos.x + (corridor_dir.x * (i + 1)), curr_door_world_pos.y + (corridor_dir.y * (i + 1)) };
-									Room corr(corridor_room, potentialCorridorPos);
+									Room corr(GetRandomCorridorOfType(CT_STRAIGHT), potentialCorridorPos);
 
 									// If any of the corridors dont fit
 									if (!CorrIsValid(corr, 0))
 										valid_corridors = false;
 
 									corr.m_rot = (Prefab_Rotation)curr_door.m_local_dir;
+
+									if (RandomIntInRange(0, 10) >= 5)
+									{
+										corr.m_rot = (Prefab_Rotation)(((int)corr.m_rot + 2) % 4);
+									}
+
 									temp.push_back(corr);
 								}
 
@@ -202,6 +218,10 @@ struct Map
 									room.m_rot = (Prefab_Rotation)r;
 									// Add room to room vector
 									m_rooms.push_back(room);
+
+									if (is_attempting_to_add_boss_room)
+										has_placed_boss_Room = true;
+
 									// Add corridors to corridor vector
 									std::for_each(temp.begin(), temp.end(), [&](Room& r) { 
 										int corridor_index = -1;
@@ -210,7 +230,9 @@ struct Map
 											m_corridors.at(corridor_index).m_file_path = corridor_room_cross.m_file_path;
 										}
 										else
-											m_corridors.push_back(r); 
+										{
+											m_corridors.push_back(r);
+										}
 									});
 									has_added_room = true;
 									// Clear temp vector
@@ -326,8 +348,11 @@ struct Map
 						{
 							// Create new corridors at each position between doors and add them to corridor vector
 							Coord corr_pos = { currDoorPos.x + (corrDir.x * (count + 1)), currDoorPos.y + (corrDir.y * (count + 1)) };
-							Room corr(corridor_room, corr_pos);
+							Room corr(GetRandomCorridorOfType(CT_STRAIGHT), corr_pos);
 							corr.m_rot = (Prefab_Rotation)m_rooms[roomIndex].m_doors[doorIndex].m_local_dir;
+							if (RandomIntInRange(0, 10) >= 5)
+								corr.m_rot = (Prefab_Rotation)(((int)corr.m_rot + 2) % 4);
+
 							m_corridors.push_back(corr);
 							// Set original door to be connected so i cannot be reused
 							m_rooms[roomIndex].m_doors[doorIndex].SetConnected(true);
@@ -342,13 +367,14 @@ struct Map
 						{
 							// Create new corridors at each position between door and connecting corridor add them to corridor vector
 							Coord corr_pos = { currDoorPos.x + (corrDir.x * (count + 1)), currDoorPos.y + (corrDir.y * (count + 1)) };
-							Room corr(corridor_room, corr_pos);
+							Room corr(GetRandomCorridorOfType(CT_STRAIGHT), corr_pos);
 							corr.m_rot = (Prefab_Rotation)m_rooms[roomIndex].m_doors[doorIndex].m_local_dir;
+							if (RandomIntInRange(0, 10) >= 5)
+								corr.m_rot = (Prefab_Rotation)(((int)corr.m_rot + 2) % 4);
 							m_corridors.push_back(corr);
+
 							// Set original door to be connected so it cannot be reused
 							m_rooms[roomIndex].m_doors[doorIndex].SetConnected(true);
-							// Need to modify existing corridor prefab we are connecting to here!
-							// TO DO
 						}
 						if (connCorridorIndex != -1)
 						{
@@ -405,7 +431,7 @@ struct Map
 							break;
 						}
 						// for each possible tile in a corridor, check if that tile intersects a current room
-						Room corr(corridor_room, testPos);
+						Room corr(GetRandomCorridorOfType(CT_STRAIGHT), testPos);
 						if (!CorrIsValid(corr, 0))
 						{
 							invalidDoor = true;
@@ -450,7 +476,7 @@ struct Map
 						break;
 					}
 					// for each possible tile in a corridor, check if that tile intersects a current room or corridor
-					Room corr(corridor_room, testPos);
+					Room corr(GetRandomCorridorOfType(CT_STRAIGHT), testPos);
 					if (!CorrIsValid(corr, 0))
 					{
 						invalidDoor = true;
@@ -475,4 +501,6 @@ struct Map
 		}
 		return false;
 	}
+
+	
 };

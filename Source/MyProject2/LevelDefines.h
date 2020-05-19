@@ -48,6 +48,13 @@ enum Cardinal_Direction
 	CD_WEST
 };
 
+enum Corridor_Type
+{
+	CT_STRAIGHT = 0,
+	CT_CROSS,
+	CT_T,
+};
+
 static int RandomIntInRange(const int min, const int max)
 {
 	return rand() % (max - min + 1) + min;
