@@ -28,6 +28,9 @@ public:
 	ARoomActor* SpawnRoom;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float EnemyHealth = 20.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsPlayerDetected = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -53,4 +56,6 @@ public:
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex);
 
+	UFUNCTION(BlueprintCallable)
+	void DamagePlayerHealth();
 };

@@ -90,3 +90,11 @@ void AEnemy::OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* othe
 		}
 	}
 }
+
+// Called when the enemy attacks the player
+
+void AEnemy::DamagePlayerHealth()
+{
+	FString text = ("Hit player!");
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+}

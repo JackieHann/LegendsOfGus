@@ -132,3 +132,9 @@ void AInteractableCharacter::UpdateAutomaticPickup()
 	}
 
 }
+
+void AInteractableCharacter::Attack()
+{
+	FString text = ("Attacked!");
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+}

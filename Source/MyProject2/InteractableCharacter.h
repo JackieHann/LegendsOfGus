@@ -38,5 +38,8 @@ private:
 
 public:
 	void Interact();
+
+	UFUNCTION(BlueprintCallable)
+	void Attack();
 	
 };
