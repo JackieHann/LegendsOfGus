@@ -52,18 +52,34 @@ void AEnemyController::Tick(float deltaTime)
 	Super::Tick(deltaTime);
 	AEnemy* enemy = Cast<AEnemy>(GetPawn());
 
+	// IF player goes out of sight range, stop chasing
 	if (DistanceToPlayer > AISightRadius)
 	{
-		bIsPlayerDetected = false;
+		enemy->bIsPlayerDetected = false;
 	}
-
-	if ((enemy->NextWaypoint != nullptr) && (bIsPlayerDetected == false))
+	// if player isnt detected, path to waypoint
+	if ((enemy->NextWaypoint != nullptr) && (enemy->bIsPlayerDetected == false))
 	{
+		enemy->bFollowingWaypoints = true;
 		MoveToActor(enemy->NextWaypoint, 1.0f);
 	}
-	else if (bIsPlayerDetected == true)
+	// If player is detected, move to player
+	else if (enemy->bIsPlayerDetected == true)
 	{
-		MoveToActor(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0), 1.0f);
+		DistanceToPlayer = GetPawn()->GetDistanceTo(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		enemy->bFollowingWaypoints = false;
+		if (DistanceToPlayer < 200.0f)
+		{
+			enemy->bFollowingPlayer = false;
+			enemy->bAttackingPlayer = true;
+			MoveToActor(enemy, 1.0f);
+		}
+		else
+		{
+			enemy->bAttackingPlayer = false;
+			enemy->bFollowingPlayer = true;
+			MoveToActor(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0), 1.0f);
+		}
 	}
 }
 
@@ -83,7 +99,7 @@ void AEnemyController::OnPawnDetected(const TArray<AActor*>& DetectedPawns)
 		if (!(DetectedPawns[i]->IsA(AEnemy::StaticClass())))
 		{ 
 			DistanceToPlayer = GetPawn()->GetDistanceTo(DetectedPawns[i]);
-			bIsPlayerDetected = true;
+			Cast<AEnemy>(GetPawn())->bIsPlayerDetected = true;
 		}
 	}
 }
