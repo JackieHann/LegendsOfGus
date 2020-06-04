@@ -58,7 +58,7 @@ public:
 	bool GetWidgetEnabled();
 
 	UFUNCTION(BlueprintCallable, Category = "Interactable")
-	FVector GetWorldPos();
+	virtual FVector GetWorldPos();
 
 	UFUNCTION(BlueprintCallable, Category = "Interactable")
 	FVector GetOffset();

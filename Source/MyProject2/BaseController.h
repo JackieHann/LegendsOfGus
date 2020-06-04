@@ -40,7 +40,7 @@ public:
 	AInteractableObject* GetTargetInteractable();
 
 
-
+	FVector GetPlayerWorldPos();
 
 private:
 	AInteractableObject* m_targetted_interactable;

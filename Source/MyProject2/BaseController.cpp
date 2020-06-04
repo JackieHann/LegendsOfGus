@@ -3,6 +3,7 @@
 
 #include "BaseController.h"
 #include "InteractableObject.h"
+#include "Engine/World.h"
 
 ABaseController::ABaseController()
 	: m_targetted_interactable(nullptr)
@@ -57,4 +58,9 @@ bool ABaseController::HasTargetInteractable()
 AInteractableObject* ABaseController::GetTargetInteractable()
 {
 	return (this->m_targetted_interactable);
+}
+
+FVector ABaseController::GetPlayerWorldPos()
+{
+	return GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
 }
