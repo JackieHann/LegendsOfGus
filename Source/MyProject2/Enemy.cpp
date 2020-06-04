@@ -58,15 +58,10 @@ void AEnemy::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* ot
 	// Check which object has entered the collider
 	if (otherActor && (otherActor != this) && otherComponent)
 	{
-		if (otherActor->ActorHasTag("Player"))
+		if (otherActor->ActorHasTag("Waypoint"))
 		{
-			FString text = ("Found player!");
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
-		}
-		else if (otherActor->ActorHasTag("Waypoint"))
-		{
-			FString text = ("Found waypoint: " + otherActor->GetName());
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+			//FString text = ("Found waypoint: " + otherActor->GetName());
+			//UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
 		}
 	}
 }
@@ -78,23 +73,18 @@ void AEnemy::OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* othe
 	// Check which object has left the collider
 	if (otherActor && (otherActor != this) && otherComponent)
 	{
-		if (otherActor->ActorHasTag("Player"))
+		if (otherActor->ActorHasTag("Waypoint"))
 		{
-			FString text = ("Player gone!");
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
-		}
-		else if (otherActor->ActorHasTag("Waypoint"))
-		{
-			FString text = ("Left waypoint: " + otherActor->GetName());
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+			//FString text = ("Left waypoint: " + otherActor->GetName());
+			//UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
 		}
 	}
 }
 
-// Called when the enemy attacks the player
-
-void AEnemy::DamagePlayerHealth()
+// Called when the enemy takes damage from the player
+void AEnemy::decreaseEnemyHealth(float damage_amount)
 {
-	FString text = ("Hit player!");
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+	EnemyHealth -= damage_amount;
+	if (EnemyHealth <= 0.0f)
+		EnemyHealth = 0.0f;
 }

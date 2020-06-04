@@ -31,6 +31,9 @@ public:
 	float EnemyHealth = 20.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float EnemyDamage = 5.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsPlayerDetected = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -57,5 +60,6 @@ public:
 	void OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex);
 
 	UFUNCTION(BlueprintCallable)
-	void DamagePlayerHealth();
+	void decreaseEnemyHealth(float damage_amount);
+
 };

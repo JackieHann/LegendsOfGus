@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Components/BoxComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "MovableCharacter.h"
@@ -16,4 +17,6 @@ public:
 	// Sets default values for this character's properties
 	ACombatCharacter();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void decreasePlayerHealth(float damage_amount);
 };
