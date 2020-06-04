@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "ManualLootObject.h"
 #include "BaseController.h"
+#include "UObject/ConstructorHelpers.h"
+#include "Components/AudioComponent.h"
 #include "DoorInteractionObject.generated.h"
 
 /**
@@ -16,24 +18,50 @@ class MYPROJECT2_API ADoorInteractionObject : public AManualLootObject
 	GENERATED_BODY()
 
 public:
+
+	virtual void BeginPlay();
+
 	virtual void Interact(ABaseController* controller) override;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Door_Settings, meta = (AllowPrivateAccess = "true"))
+	float Door_Open_Angle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Door_Settings, meta = (AllowPrivateAccess = "true"))
+	bool Door_Is_Locked;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Door_Settings, meta = (AllowPrivateAccess = "true"))
+	float Door_Speed;
+
+	//Group sound variables into Audio classification
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Audio, meta = (AllowPrivateAccess = "true"))
+	class USoundCue* SFX_OpenDoor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Audio, meta = (AllowPrivateAccess = "true"))
+	class USoundCue* SFX_LockedDoor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Audio, meta = (AllowPrivateAccess = "true"))
+	class USoundCue* SFX_UnlockedDoor;
+
+	class UStaticMeshComponent* Key_Mesh;
+
+	virtual FString GetInteractText() override;
+
+	virtual FVector GetWorldPos() override;
 
 private:
 	ADoorInteractionObject();
-	float originalRotation;
 
+	bool Locked;
 	bool Opening;
 	bool Closing;
-	bool isClosed;
 
-	float DotP;
-	float MaxDegree;
-	float AddRotation;
-	float PosNeg;
-	float DoorCurrentRotation;
-
+	float OriginalRotation;
+	float Rotation;
+	
+	UAudioComponent* AC_LockedDoor;
+	UAudioComponent* AC_OpenDoor;
+	UAudioComponent* AC_UnlockedDoor;
 };

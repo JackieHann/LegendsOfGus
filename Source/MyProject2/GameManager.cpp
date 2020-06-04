@@ -52,7 +52,5 @@ SceneManager* GetSceneManager()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Scene Manager Called With ID: %i"), manager->_managerID);
 	}
-
-
 	return &(manager->_sceneManager);
 }

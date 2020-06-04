@@ -30,6 +30,7 @@ private:
 	void SetUIVisibility(ESlateVisibility visible);
 	void UpdateUI(ABaseController* const player_controller);
 
+	bool show_next_frame;
 public:
 
 	//Overrides

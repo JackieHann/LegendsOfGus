@@ -15,9 +15,7 @@ class MYPROJECT2_API ADifficultyInteractionObject : public AManualLootObject
 	GENERATED_BODY()
 	
 public:
-
 	
-
 	virtual void Interact(ABaseController* controller) override;
 
 	// Called every frame

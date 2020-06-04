@@ -16,6 +16,7 @@ void UInteractionWidget::NativePreConstruct()
 	Super::NativePreConstruct();
 
 	this->SetAlignmentInViewport({ 0.5, 0.5 });
+	show_next_frame = false;
 
 }
 void UInteractionWidget::NativeConstruct()
@@ -30,8 +31,12 @@ void UInteractionWidget::NativeDestruct()
 
 void UInteractionWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
-	//Do any other update functions within the blueprint
-	Super::NativeTick(MyGeometry, InDeltaTime);
+	
+	if (show_next_frame)
+	{
+		show_next_frame = false;
+		this->SetUIVisibility(ESlateVisibility::Visible);
+	}
 
 	//Get player on tick
 	ABaseController* const player_controller = Cast<ABaseController>(UGameplayStatics::GetPlayerController(this, 0));
@@ -41,13 +46,16 @@ void UInteractionWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTi
 		if (player_controller->GetInteractableWidgetEnabled())
 		{
 			this->UpdateUI(player_controller);
-			this->SetUIVisibility(ESlateVisibility::Visible);
+			show_next_frame = true;
 		}
 		else
 		{
 			this->SetUIVisibility(ESlateVisibility::Hidden);
 		}
 	}
+
+	//Do any other update functions within the blueprint
+	Super::NativeTick(MyGeometry, InDeltaTime);
 }
 
 void UInteractionWidget::UpdateUI(ABaseController* const player_controller)

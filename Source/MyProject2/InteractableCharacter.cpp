@@ -27,6 +27,7 @@ void AInteractableCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
+	// Use 2nd Interact keybind since no support for multiple bindings between c++ and blueprint..?
 	PlayerInputComponent->BindAction("Interact2", IE_Pressed, this, &AInteractableCharacter::Interact);
 
 }
