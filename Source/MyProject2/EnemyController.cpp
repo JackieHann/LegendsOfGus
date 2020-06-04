@@ -52,19 +52,50 @@ void AEnemyController::Tick(float deltaTime)
 	Super::Tick(deltaTime);
 	AEnemy* enemy = Cast<AEnemy>(GetPawn());
 
-	if (DistanceToPlayer > AISightRadius)
+	// if enemy is alive then move
+	if (enemy->EnemyHealth != 0.0f)
+	{ 
+		// IF player goes out of sight range, stop chasing
+		if (DistanceToPlayer > AISightRadius)
+		{
+			enemy->bIsPlayerDetected = false;
+		}
+		// if player isnt detected, path to waypoint
+		if ((enemy->NextWaypoint != nullptr) && (enemy->bIsPlayerDetected == false))
+		{
+			enemy->bFollowingWaypoints = true;
+			MoveToActor(enemy->NextWaypoint, 1.0f);
+		}
+		// If player is detected, move to player
+		else if (enemy->bIsPlayerDetected == true)
+		{
+			DistanceToPlayer = GetPawn()->GetDistanceTo(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+			enemy->bFollowingWaypoints = false;
+			if (DistanceToPlayer < 200.0f)
+			{
+				enemy->bFollowingPlayer = false;
+				enemy->bAttackingPlayer = true;
+				MoveToActor(enemy, 1.0f);
+			}
+			else
+			{
+				enemy->bAttackingPlayer = false;
+				enemy->bFollowingPlayer = true;
+				MoveToActor(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0), 1.0f);
+			}
+		}
+	}
+	// if enemy is dead then stop moving completely
+	else
 	{
-		bIsPlayerDetected = false;
+		enemy->bAttackingPlayer = false;
+		enemy->bFollowingPlayer = false;
+		enemy->bFollowingWaypoints = false;
+		enemy->bIsPlayerDetected = false;
+		MoveToActor(enemy, 1.0f);
 	}
 
-	if ((enemy->NextWaypoint != nullptr) && (bIsPlayerDetected == false))
-	{
-		MoveToActor(enemy->NextWaypoint, 1.0f);
-	}
-	else if (bIsPlayerDetected == true)
-	{
-		MoveToActor(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0), 1.0f);
-	}
+	
 }
 
 FRotator AEnemyController::GetControlRotation() const
@@ -83,7 +114,7 @@ void AEnemyController::OnPawnDetected(const TArray<AActor*>& DetectedPawns)
 		if (!(DetectedPawns[i]->IsA(AEnemy::StaticClass())))
 		{ 
 			DistanceToPlayer = GetPawn()->GetDistanceTo(DetectedPawns[i]);
-			bIsPlayerDetected = true;
+			Cast<AEnemy>(GetPawn())->bIsPlayerDetected = true;
 		}
 	}
 }

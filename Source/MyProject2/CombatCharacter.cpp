@@ -2,6 +2,7 @@
 
 
 #include "CombatCharacter.h"
+#include "Enemy.h"
 #include "Engine.h"
 
 // Sets default values

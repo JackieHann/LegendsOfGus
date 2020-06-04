@@ -27,6 +27,24 @@ public:
 	UPROPERTY(EditAnywhere)
 	ARoomActor* SpawnRoom;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float EnemyHealth = 20.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float EnemyDamage = 5.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bIsPlayerDetected = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bAttackingPlayer = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bFollowingPlayer = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bFollowingWaypoints = true;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -40,4 +58,8 @@ public:
 	
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex);
+
+	UFUNCTION(BlueprintCallable)
+	void decreaseEnemyHealth(float damage_amount);
+
 };

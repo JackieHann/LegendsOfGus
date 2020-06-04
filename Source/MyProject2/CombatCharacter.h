@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Components/BoxComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "MovableCharacter.h"
@@ -22,6 +23,11 @@ public:
 	bool HasKey();
 	void UseKey();
 	void AddKey(int amt);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void decreasePlayerHealth(float damage_amount);
+
 private:
 	int m_current_keys;
+	
 };
