@@ -46,6 +46,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetPlayerLerpingHealthPercentage();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void OnPlayerDeath();
+
 	virtual void Tick(float delta_time) override;
 
 private:

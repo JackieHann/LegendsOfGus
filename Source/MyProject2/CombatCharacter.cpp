@@ -33,14 +33,23 @@ void ACombatCharacter::AddKey(int amt)
 
 void ACombatCharacter::decreasePlayerHealth(float damage_amount)
 {
-	this->player_current_health -= damage_amount;
-	ClampPlayerHealth();
+	if (this->player_current_health > 0.0f)
+	{
+		this->player_current_health -= damage_amount;
+		if (this->player_current_health <= 0.0f)
+			OnPlayerDeath();
+
+		ClampPlayerHealth();
+	}
 }
 
 void ACombatCharacter::increasePlayerHealth(float health_gained)
 {
-	this->player_current_health += health_gained;
-	ClampPlayerHealth();
+	if (this->player_current_health < this->player_max_health)
+	{
+		this->player_current_health += health_gained;
+		ClampPlayerHealth();
+	}
 }
 
 float ACombatCharacter::GetPlayerCurrentHealth()

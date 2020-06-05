@@ -49,6 +49,16 @@ void AEnemy::Tick(float DeltaTime)
 	{
 		NextWaypoint = SpawnRoom->getRandomStartWaypoint();
 	}
+
+	//Aka timeout
+	if (this->should_timeout)
+	{
+		time_before_removal -= DeltaTime;
+		if (time_before_removal < 0.f)
+		{
+			this->Destroy();
+		}
+	}
 }
 
 
@@ -87,6 +97,7 @@ void AEnemy::decreaseEnemyHealth(float damage_amount)
 	EnemyHealth -= damage_amount;
 	if (EnemyHealth <= 0.0f)
 	{
+		should_timeout = true;
 		EnemyHealth = 0.0f;
 		SetActorEnableCollision(false);
 		//this->Collider->SetGenerateOverlapEvents(false);

@@ -45,6 +45,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bFollowingWaypoints = true;
 
+	float time_before_removal = 10.0f;
+	bool should_timeout = false;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
