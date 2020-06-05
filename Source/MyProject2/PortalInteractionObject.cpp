@@ -27,7 +27,8 @@ void APortalInteractionObject::Interact(ABaseController* controller)
 	{
 		//Valid teleport, so tele
 		controller->GetPawn()->SetActorLocation(Target_World_Position);
-
+		//FRotator origin_rotation = { 0, 180, 0 };
+		//controller->GetPawn()->SetActorRotation(origin_rotation);
 		//Also, reset stats etc here..
 	}
 
