@@ -24,10 +24,36 @@ public:
 	void UseKey();
 	void AddKey(int amt);
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	UPROPERTY(EditDefaultsOnly)
+	float player_max_health = 100;
+
+
+	UFUNCTION(BlueprintCallable)
 	void decreasePlayerHealth(float damage_amount);
 
+	UFUNCTION(BlueprintCallable)
+	void increasePlayerHealth(float health_gained);
+
+	UFUNCTION(BlueprintCallable)
+	float GetPlayerCurrentHealth();
+
+	UFUNCTION(BlueprintCallable)
+	float GetPlayerMaxHealth();
+
+	UFUNCTION(BlueprintCallable)
+	float GetPlayerHealthPercentage();
+
+	UFUNCTION(BlueprintCallable)
+	float GetPlayerLerpingHealthPercentage();
+
+	virtual void Tick(float delta_time) override;
+
 private:
+
 	int m_current_keys;
 	
+	float player_current_health = 100;
+	float player_lerping_health = 100;
+
+	void ClampPlayerHealth();
 };

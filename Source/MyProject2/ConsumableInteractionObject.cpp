@@ -2,6 +2,7 @@
 
 
 #include "ConsumableInteractionObject.h"
+#include "CombatCharacter.h"
 
 AConsumableInteractionObject::AConsumableInteractionObject()
 {
@@ -21,20 +22,26 @@ void AConsumableInteractionObject::Interact(ABaseController* controller)
 {
 	if (this->current_charges > 0)
 	{
-		Consume();
+		Consume(controller);
 	}
 	AManualLootObject::Interact(controller);
 }
 
-void AConsumableInteractionObject::Consume()
+void AConsumableInteractionObject::Consume(ABaseController* controller)
 {
 	this->current_charges--;
 	if (this->current_charges < 0) this->current_charges = 0;
 
+	ACombatCharacter* c = Cast<ACombatCharacter>(controller->GetCharacter());
+	if (c)
+	{
+		c->increasePlayerHealth(this->Health_Restored);
+	}
+
 	//Handle Player Health Here
 	//PlayerHealth += Health_Restored;
-	FString str = "Player Consumed item and restored health.";
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, str);
+	//FString str = "Player Consumed item and restored health.";
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Blue, str);
 }
 
 FString AConsumableInteractionObject::GetInteractText()

@@ -23,7 +23,7 @@ public:
 private:
 
 	AConsumableInteractionObject();
-	void Consume();
+	void Consume(ABaseController* controller);
 
 	UPROPERTY(EditDefaultsOnly)
 	int Charges;
