@@ -97,7 +97,7 @@ void ACombatCharacter::Tick(float delta_time)
 			this->player_lerping_health = this->player_current_health;
 	}
 
-
+	Super::Tick(delta_time);
 }
 
 
