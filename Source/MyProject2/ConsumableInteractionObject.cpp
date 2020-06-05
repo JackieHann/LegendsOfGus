@@ -53,5 +53,5 @@ FString AConsumableInteractionObject::GetInteractText()
 
 bool AConsumableInteractionObject::OverridesDeletion()
 {
-	return Destroy_On_Consume && this->Charges;
+	return Destroy_On_Consume && this->current_charges;
 }
