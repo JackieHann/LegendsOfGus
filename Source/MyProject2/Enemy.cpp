@@ -21,7 +21,7 @@ AEnemy::AEnemy(const FObjectInitializer& ObjectInitializer)
 	bUseControllerRotationRoll = false;
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 600.0f, 0.0f);
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 300.0f, 0.0f);
 
 	// Set enemy controller	
 	AIControllerClass = AEnemyController::StaticClass();

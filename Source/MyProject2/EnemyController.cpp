@@ -59,11 +59,13 @@ void AEnemyController::Tick(float deltaTime)
 		if (DistanceToPlayer > AISightRadius)
 		{
 			enemy->bIsPlayerDetected = false;
+			enemy->GetCharacterMovement()->MaxWalkSpeed = enemy->patrolSpeed;
 		}
 		// if player isnt detected, path to waypoint
 		if ((enemy->NextWaypoint != nullptr) && (enemy->bIsPlayerDetected == false))
 		{
 			enemy->bFollowingWaypoints = true;
+			enemy->GetCharacterMovement()->MaxWalkSpeed = enemy->patrolSpeed;
 			MoveToActor(enemy->NextWaypoint, 1.0f);
 		}
 		// If player is detected, move to player
@@ -83,6 +85,8 @@ void AEnemyController::Tick(float deltaTime)
 				enemy->bFollowingPlayer = true;
 				MoveToActor(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0), 1.0f);
 			}
+
+			enemy->GetCharacterMovement()->MaxWalkSpeed = enemy->chaseSpeed;
 		}
 	}
 	// if enemy is dead then stop moving completely

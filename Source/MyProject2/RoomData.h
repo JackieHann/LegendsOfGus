@@ -316,9 +316,9 @@ static std::vector<RoomData> GLOBAL_ROOM_DATA =
 	room_7x7_3door_T_Cage,
 	room_7x7_3door_T_Pillars,
 	room_7x7_3door_T_Circle,
-	room_9x9_3_door_T_Storeroom,
+	room_9x9_3_door_T_Storeroom/*,
 	room_9x9_3_door_T_Torture,
-	room_9x9_3_door_T_Upper
+	room_9x9_3_door_T_Upper*/
 };
 
 //Containers for futureproofing

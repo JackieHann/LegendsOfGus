@@ -49,9 +49,13 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void OnPlayerDeath();
 
+	//UFUNCTION(BlueprintCallable)
+	//void GetPlayer;
+
 	virtual void Tick(float delta_time) override;
 
 private:
+
 
 	int m_current_keys;
 	

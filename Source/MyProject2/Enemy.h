@@ -45,6 +45,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bFollowingWaypoints = true;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float patrolSpeed = 200;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float chaseSpeed = 300;
+
 	float time_before_removal = 10.0f;
 	bool should_timeout = false;
 
