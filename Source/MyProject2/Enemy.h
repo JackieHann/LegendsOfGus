@@ -45,7 +45,7 @@ public:
 	bool bFollowingPlayer = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	bool bFollowingWaypoints = true;
+	bool bFollowingWaypoints = false;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float patrolSpeed = 200;
@@ -61,7 +61,7 @@ public:
 	float idle_time_current;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	bool bIsIdling = false;
+	bool bIsIdling = true;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UAudioComponent* hitSound;

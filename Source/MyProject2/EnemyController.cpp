@@ -63,8 +63,16 @@ void AEnemyController::Tick(float deltaTime)
 			if (enemy->idle_time_current < 0.0f)
 			{
 				enemy->bIsIdling = false;
-				enemy->bFollowingWaypoints = true;
-				enemy->NextWaypoint = enemy->NextWaypoint->getRandomNextWaypoint();
+				if (enemy->NextWaypoint == nullptr)
+				{
+					enemy->bIsIdling = true;
+					enemy->setRandomIdleTime();
+				}
+				else
+				{
+					enemy->bFollowingWaypoints = true;
+					enemy->NextWaypoint = enemy->NextWaypoint->getRandomNextWaypoint();
+				}
 			}
 		}
 		// If player goes out of sight range, stop chasing and go to idle state
