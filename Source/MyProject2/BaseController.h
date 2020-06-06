@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "Styling/SlateColor.h"
 #include "BaseController.generated.h"
 
 /**
@@ -29,6 +30,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	FString GetInteractableString();
+
+	UFUNCTION(BlueprintCallable, Category = "Interaction")
+	FSlateColor GetInteractableColour();
 
 	UFUNCTION(BlueprintCallable, Category = "Interaction")
 	void SetTargetInteractable(AInteractableObject* obj);

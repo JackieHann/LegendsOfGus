@@ -46,6 +46,11 @@ FString ABaseController::GetInteractableString()
 	return this->m_targetted_interactable->GetInteractText();
 }
 
+FSlateColor ABaseController::GetInteractableColour()
+{
+	return this->m_targetted_interactable->GetInteractColour();
+}
+
 void ABaseController::SetTargetInteractable(AInteractableObject* obj)
 {
 	m_targetted_interactable = obj;

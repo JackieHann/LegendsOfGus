@@ -4,6 +4,7 @@
 #include "CombatCharacter.h"
 #include "Enemy.h"
 #include "Engine.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ACombatCharacter::ACombatCharacter()
@@ -13,6 +14,29 @@ ACombatCharacter::ACombatCharacter()
 	player_current_health = player_max_health;
 	m_current_keys = 0;
 }
+
+
+int ACombatCharacter::GetPlayerLootCount(int rarity)
+{
+	return m_player_loot_info.loot_count[(LootRarity)rarity];
+}
+
+void ACombatCharacter::AddPlayerLootCount(int rarity)
+{
+	FString str = "Loot Collected with Rarity: " + FString::FromInt(rarity) + " ]";
+	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, str);
+
+	m_player_loot_info.loot_count[(LootRarity)rarity]++;
+}
+
+
+void ACombatCharacter::DecrementPlayerLootCount(int rarity)
+{
+	if (GetPlayerLootCount(rarity) > 0)
+		m_player_loot_info.loot_count[(LootRarity)rarity]--;
+
+}
+
 
 bool ACombatCharacter::HasKey()
 {
@@ -96,6 +120,15 @@ void ACombatCharacter::Tick(float delta_time)
 		if (this->player_lerping_health < this->player_lerping_health)
 			this->player_lerping_health = this->player_current_health;
 	}
+
+	//Test for linking loot with UI
+	/*static float testtimer = 0.0f;
+	testtimer += delta_time;
+	if (testtimer > 2.0f)
+	{
+		testtimer = 0.0f;
+		AddPlayerLootCount(UKismetMathLibrary::RandomIntegerInRange(LR_COMMON, LR_LEGENDARY));
+	}*/
 
 	Super::Tick(delta_time);
 }

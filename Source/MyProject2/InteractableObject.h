@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Styling/SlateColor.h"
 #include "InteractableObject.generated.h"
 
 class ABaseController;
@@ -30,29 +31,32 @@ public:
 	virtual void Interact(ABaseController* controller);
 
 	//Capitalized For Visual In Editor..
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Style)
 	FString Name;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Style)
 	bool Enable_Name_Tooltip;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Style)
 	FString Action;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Style)
 	bool Enable_Action_Tooltip;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Style)
 	FString Key;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Style)
 	bool Enable_Key_Tooltip;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool Enable_Widget;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector Widget_Offset;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool Delete_On_Interact;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Style)
+	FSlateColor Interact_Colour;
 
 	UFUNCTION(BlueprintCallable, Category = "Interactable")
 	bool GetWidgetEnabled();
@@ -65,5 +69,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Interactable")
 	virtual FString GetInteractText();
+
+	UFUNCTION(BlueprintCallable, Category = "Interactable")
+	virtual FSlateColor GetInteractColour();
 
 };

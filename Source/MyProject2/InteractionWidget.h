@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "BaseController.h"
+#include "Styling/SlateColor.h"
 #include "InteractionWidget.generated.h"
 
 /**

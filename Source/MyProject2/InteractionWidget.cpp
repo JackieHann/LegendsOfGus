@@ -62,6 +62,7 @@ void UInteractionWidget::UpdateUI(ABaseController* const player_controller)
 	//Update Text within header
 	if (HeaderText) HeaderText->SetText(FText::FromString(player_controller->GetInteractableString()));
 
+	if (HeaderText) HeaderText->SetColorAndOpacity(player_controller->GetInteractableColour());
 	//Set our GUI pos to match the location of the interactable
 	FVector2D screen_pos = player_controller->GetInteractableScreenspaceCoord();
 

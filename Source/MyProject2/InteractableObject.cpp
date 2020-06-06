@@ -60,6 +60,11 @@ FString AInteractableObject::GetInteractText()
 	//   FString::Printf(TEXT("%s : Press %s to %s"), *Name, *Key, *Action);
 }
 
+FSlateColor AInteractableObject::GetInteractColour()
+{
+	return this->Interact_Colour;
+}
+
 // Called when the game starts or when spawned
 void AInteractableObject::BeginPlay()
 {

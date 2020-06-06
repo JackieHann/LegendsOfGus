@@ -15,10 +15,24 @@ class MYPROJECT2_API ACombatCharacter : public AMovableCharacter
 {
 	GENERATED_BODY()
 
+	enum LootRarity
+	{
+		LR_COMMON,
+		LR_UNCOMMON,
+		LR_RARE,
+		LR_EPIC,
+		LR_LEGENDARY
+	};
+	
+
+	struct PlayerLootInfo
+	{
+		int loot_count[LR_LEGENDARY+1];
+	} m_player_loot_info;
+
 public:
 	// Sets default values for this character's properties
 	ACombatCharacter();
-
 
 	bool HasKey();
 	void UseKey();
@@ -52,7 +66,21 @@ public:
 	//UFUNCTION(BlueprintCallable)
 	//void GetPlayer;
 
+	UFUNCTION(BlueprintCallable)
+	int GetPlayerLootCount(int rarity);
+
+	UFUNCTION(BlueprintCallable)
+	void AddPlayerLootCount(int rarity);
+
+	UFUNCTION(BlueprintCallable)
+	void DecrementPlayerLootCount(int rarity);
+
 	virtual void Tick(float delta_time) override;
+
+
+
+
+
 
 private:
 

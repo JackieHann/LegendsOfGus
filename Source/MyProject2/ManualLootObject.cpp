@@ -14,8 +14,8 @@ void AManualLootObject::Interact(ABaseController* controller)
 	//FString str = "Interacted With Item [ " + this->GetName() + " ]";
 	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, str);
 
-	if(!OverridesDeletion() && this->Delete_On_Interact)
-		Destroy();
+	if (!OverridesDeletion() && this->Delete_On_Interact)
+		DeleteSelf();
 }
 
 void AManualLootObject::Tick(float DeltaTime)
@@ -27,4 +27,9 @@ void AManualLootObject::Tick(float DeltaTime)
 bool AManualLootObject::OverridesDeletion()
 {
 	return false;
+}
+
+void AManualLootObject::DeleteSelf()
+{
+	Destroy();
 }
