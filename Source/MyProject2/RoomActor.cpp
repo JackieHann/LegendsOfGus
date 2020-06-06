@@ -34,7 +34,7 @@ void ARoomActor::BeginPlay()
 	TInlineComponentArray<UChildActorComponent*> components;
 	GetComponents(components);
 
-	// add wayoints to waypoint list
+	// add waypoints to waypoint list
 	for (auto& component : components)
 	{
 		// For all waypoint components

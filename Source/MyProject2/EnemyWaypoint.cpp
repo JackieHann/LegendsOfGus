@@ -32,8 +32,14 @@ void AEnemyWaypoint::Tick(float DeltaTime)
 
 AEnemyWaypoint* AEnemyWaypoint::getRandomNextWaypoint()
 {
-	int32 index = FMath::RandRange(0, PossibleWaypoints.Num() - 1);
-	return PossibleWaypoints[index];
+	if (PossibleWaypoints.Num() > 0)
+	{
+		int32 index = FMath::RandRange(0, PossibleWaypoints.Num() - 1);
+		return PossibleWaypoints[index];
+	}
+	else
+		return nullptr;
+	
 }
 
 void AEnemyWaypoint::OnEnemyEnter(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
