@@ -61,10 +61,10 @@ public:
 	FSlateColor Interact_Colour;
 
 
-	UPROPERTY(EditAnywhere, Category = Audio, meta = (AllowPrivateAccess = "true"))
-	bool Use_SFX;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Audio, meta = (AllowPrivateAccess = "true"))
-	class USoundCue* Interact_SFX;
+	//UPROPERTY(EditAnywhere, Category = Audio, meta = (AllowPrivateAccess = "true"))
+	//bool Use_SFX;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Audio, meta = (AllowPrivateAccess = "true"))
+	//class USoundCue* Interact_SFX;
 
 
 
