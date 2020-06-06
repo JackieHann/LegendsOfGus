@@ -106,9 +106,29 @@ void AEnemy::decreaseEnemyHealth(float damage_amount)
 	{
 		should_timeout = true;
 		EnemyHealth = 0.0f;
+		SpawnLoot();
 		SetActorEnableCollision(false);
 	}
 		
+}
+
+void AEnemy::SpawnLoot()
+{
+	if (loot_prefab)
+	{
+		UWorld* world = GetWorld();
+		if (world)
+		{
+			ACharacter* p_char = world->GetFirstPlayerController()->GetCharacter();
+			FActorSpawnParameters spawnParams;
+			spawnParams.Owner = p_char;
+			FRotator rotator;
+			FVector spawnLocation = this->GetActorLocation();
+
+			//Spawn 1, should be random? + add force
+			world->SpawnActor<AGearLootObject>(loot_prefab, spawnLocation, rotator, spawnParams);
+		}
+	}
 }
 
 void AEnemy::setRandomIdleTime()

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Styling/SlateColor.h"
+#include "Components/AudioComponent.h"
 #include "InteractableObject.generated.h"
 
 class ABaseController;
@@ -14,6 +15,7 @@ class MYPROJECT2_API AInteractableObject : public AActor
 {
 	GENERATED_BODY()
 	
+	UAudioComponent* Interact_AC;
 public:	
 	// Sets default values for this actor's properties
 	AInteractableObject();
@@ -57,6 +59,14 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Style)
 	FSlateColor Interact_Colour;
+
+
+	UPROPERTY(EditAnywhere, Category = Audio, meta = (AllowPrivateAccess = "true"))
+	bool Use_SFX;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Audio, meta = (AllowPrivateAccess = "true"))
+	class USoundCue* Interact_SFX;
+
+
 
 	UFUNCTION(BlueprintCallable, Category = "Interactable")
 	bool GetWidgetEnabled();

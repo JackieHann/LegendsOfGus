@@ -24,6 +24,13 @@ AInteractableObject::AInteractableObject()
 	Enable_Widget = true;
 	Delete_On_Interact = true;
 
+
+	Use_SFX = false;
+	Interact_SFX = NULL;
+
+	Interact_AC = CreateDefaultSubobject<UAudioComponent>(TEXT("Interact_AC"));
+	Interact_AC->SetupAttachment(RootComponent);
+
 }
 
 void AInteractableObject::Interact(ABaseController* controller)
@@ -31,6 +38,9 @@ void AInteractableObject::Interact(ABaseController* controller)
 	//Skeleton to override
 	FString str = "Interacted With Item [ " + this->GetName() + " ]";
 	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, str);
+	
+	if (Use_SFX && Interact_AC && Interact_SFX)
+		Interact_AC->Play(0.f);
 }
 
 bool AInteractableObject::GetWidgetEnabled()
@@ -69,6 +79,8 @@ FSlateColor AInteractableObject::GetInteractColour()
 void AInteractableObject::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (Interact_SFX) Interact_AC->SetSound((USoundBase*)Interact_SFX);
 	
 }
 

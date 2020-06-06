@@ -8,6 +8,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/AudioComponent.h"
 #include "RoomActor.h"
+#include "GearLootObject.h"
 #include "Enemy.generated.h"
 
 UCLASS()
@@ -64,6 +65,11 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UAudioComponent* hitSound;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AGearLootObject> loot_prefab;
+
+	void SpawnLoot();
 
 protected:
 	// Called when the game starts or when spawned
