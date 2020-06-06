@@ -20,7 +20,7 @@ public:
 	virtual bool OverridesDeletion() override;
 
 	virtual FString GetInteractText() override;
-private:
+protected:
 
 	AConsumableInteractionObject();
 	void Consume(ABaseController* controller);
