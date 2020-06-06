@@ -19,6 +19,7 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual FString GetInteractText() override;
 
 private:
 	APortalInteractionObject();
@@ -26,4 +27,6 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	FVector Target_World_Position;
 
+	UPROPERTY(EditDefaultsOnly)
+	bool Is_Start_Dungeon_Spawn;
 };

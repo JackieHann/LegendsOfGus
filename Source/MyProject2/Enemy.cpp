@@ -124,9 +124,13 @@ void AEnemy::SpawnLoot()
 			spawnParams.Owner = p_char;
 			FRotator rotator;
 			FVector spawnLocation = this->GetActorLocation();
+			spawnLocation.Z += 5.0f;
 
 			//Spawn 1, should be random? + add force
-			world->SpawnActor<AGearLootObject>(loot_prefab, spawnLocation, rotator, spawnParams);
+			int num_to_spawn = FMath::RandRange(1, 4);
+
+			for(int i = 0; i < num_to_spawn; i++)
+				world->SpawnActor<AGearLootObject>(loot_prefab, spawnLocation, rotator, spawnParams);
 		}
 	}
 }

@@ -2,6 +2,7 @@
 
 
 #include "DifficultyInteractionObject.h"
+#include "CombatCharacter.h"
 
 ADifficultyInteractionObject::ADifficultyInteractionObject()
 	: AManualLootObject()
@@ -17,15 +18,23 @@ void ADifficultyInteractionObject::Tick(float DeltaTime)
 
 void ADifficultyInteractionObject::Interact(ABaseController* controller)
 {
-	//Difficulty will be increased here, stored in managers somewhere later.
-	if (this->Increases_Difficulty)
+	ACombatCharacter* p_char = (controller && controller->GetCharacter() ? Cast<ACombatCharacter>(controller->GetCharacter()) : NULL);
+	if (p_char)
 	{
-		//Higher manager diff
+		//Difficulty will be increased here, stored in managers somewhere later.
+		if (this->Increases_Difficulty)
+		{
+			//Higher manager diff
+			p_char->ChangeDifficulty(1);
+		}
+		else
+		{
+			//Lower manager diff
+			p_char->ChangeDifficulty(-1);
+		}
+
 	}
-	else
-	{
-		//Lower manager diff
-	}
+	
 
 	AManualLootObject::Interact(controller);
 }

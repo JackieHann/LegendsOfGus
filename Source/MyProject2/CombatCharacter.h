@@ -41,6 +41,7 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	float player_max_health = 100;
 
+	
 
 	UFUNCTION(BlueprintCallable)
 	void decreasePlayerHealth(float damage_amount);
@@ -77,15 +78,31 @@ public:
 
 	virtual void Tick(float delta_time) override;
 
+	//UPROPERTY(EditDefaultsOnly)
+	float player_difficulty = 1;
+
+	UFUNCTION(BlueprintCallable)
+	void ChangeDifficulty(int num);
+
+	UFUNCTION(BlueprintCallable)
+	int GetDifficulty();
 
 
+	UFUNCTION(BlueprintCallable)
+	float GetDifficultyModifier();
 
 
+	UFUNCTION(BlueprintCallable)
+	int GetTotalScore();
 
 private:
 
+	float timer = 0.0f;
+	bool should_update_score = false;
+	int m_total_score = 0;
+	void UpdateTotalScore();
 
-	int m_current_keys;
+	int m_current_keys = 0;
 	
 	float player_current_health = 100;
 	float player_lerping_health = 100;

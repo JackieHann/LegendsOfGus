@@ -21,11 +21,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditDefaultsOnly)
+	bool Increases_Difficulty;
+
 private:
 	ADifficultyInteractionObject();
 
-	UPROPERTY(EditDefaultsOnly)
-		bool Increases_Difficulty;
+	
 
 
 };

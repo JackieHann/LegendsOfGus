@@ -59,9 +59,13 @@ void ACombatCharacter::decreasePlayerHealth(float damage_amount)
 {
 	if (this->player_current_health > 0.0f)
 	{
-		this->player_current_health -= damage_amount;
+		this->player_current_health -= (damage_amount * GetDifficultyModifier());
 		if (this->player_current_health <= 0.0f)
+		{
 			OnPlayerDeath();
+			should_update_score = true;
+		}
+			
 
 		ClampPlayerHealth();
 	}
@@ -121,6 +125,16 @@ void ACombatCharacter::Tick(float delta_time)
 			this->player_lerping_health = this->player_current_health;
 	}
 
+	if (this->should_update_score)
+	{
+		timer += delta_time;
+		if (timer > 0.15f)
+		{
+			timer = 0.0f;
+			UpdateTotalScore();
+		}
+	}
+
 	//Test for linking loot with UI
 	/*static float testtimer = 0.0f;
 	testtimer += delta_time;
@@ -133,5 +147,60 @@ void ACombatCharacter::Tick(float delta_time)
 	Super::Tick(delta_time);
 }
 
+void ACombatCharacter::ChangeDifficulty(int num)
+{
+	player_difficulty += num;
 
+	const int max = 10;
+	const int min = 1;
+
+	if (player_difficulty < min) player_difficulty = min;
+	if (player_difficulty > max) player_difficulty = max;
+	
+}
+
+int ACombatCharacter::GetDifficulty()
+{
+	return this->player_difficulty;
+}
+
+float ACombatCharacter::GetDifficultyModifier()
+{
+	return 0.9f + (this->player_difficulty/ 10.f);
+}
+
+void ACombatCharacter::UpdateTotalScore()
+{
+	if (m_player_loot_info.loot_count[LR_COMMON] > 0)
+	{
+		m_total_score += 1;
+		m_player_loot_info.loot_count[LR_COMMON]--;
+	}
+	else if (m_player_loot_info.loot_count[LR_UNCOMMON] > 0)
+	{
+		m_total_score += 3;
+		m_player_loot_info.loot_count[LR_UNCOMMON]--;
+	}
+	else if (m_player_loot_info.loot_count[LR_RARE] > 0)
+	{
+		m_total_score += 7;
+		m_player_loot_info.loot_count[LR_RARE]--;
+	}
+	else if (m_player_loot_info.loot_count[LR_EPIC] > 0)
+	{
+		m_total_score += 15;
+		m_player_loot_info.loot_count[LR_EPIC]--;
+	}
+
+	else if (m_player_loot_info.loot_count[LR_LEGENDARY] > 0)
+	{
+		m_total_score += 25;
+		m_player_loot_info.loot_count[LR_LEGENDARY]--;
+	}
+}
+
+int ACombatCharacter::GetTotalScore()
+{
+	return this->m_total_score;
+}
 

@@ -34,8 +34,8 @@ void AGearLootObject::BeginPlay()
 
 	UpdateMaterial();
 
-	FString str = "Loot Spawned with Name: " + loot_name + " and Rarity: " + FString::FromInt(loot_rarity) + " ]";
-	GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, str);
+	//FString str = "Loot Spawned with Name: " + loot_name + " and Rarity: " + FString::FromInt(loot_rarity) + " ]";
+	//GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Green, str);
 
 }
 

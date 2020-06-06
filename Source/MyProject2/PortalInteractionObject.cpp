@@ -3,11 +3,13 @@
 
 #include "PortalInteractionObject.h"
 #include "BaseController.h"
+#include "CombatCharacter.h"
 #include "Engine/World.h"
 
 APortalInteractionObject::APortalInteractionObject()
 	: AManualLootObject()
 {
+	Is_Start_Dungeon_Spawn = true;
 	this->Target_World_Position.Set(0, 0, 0);
 }
 
@@ -33,4 +35,16 @@ void APortalInteractionObject::Interact(ABaseController* controller)
 	}
 
 	AManualLootObject::Interact(controller);
+}
+
+FString APortalInteractionObject::GetInteractText()
+{
+	ACombatCharacter* p_char = Cast<ACombatCharacter>(GetWorld()->GetFirstPlayerController()->GetCharacter());
+	if (p_char && this->Is_Start_Dungeon_Spawn)
+	{
+		FString action_section = (FString::Printf(TEXT("Enter Dungeon (+%i)"), p_char->GetDifficulty()));
+		return action_section;
+	}
+
+	return AManualLootObject::GetInteractText();
 }
