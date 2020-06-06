@@ -54,6 +54,13 @@ public:
 	float time_before_removal = 10.0f;
 	bool should_timeout = false;
 
+	float idle_time_min = 1.5f;
+	float idle_time_max = 3.0f;
+	float idle_time_current;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bIsIdling = false;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -61,6 +68,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void setRandomIdleTime();
 
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* otherActor, UPrimitiveComponent* otherComponent, int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

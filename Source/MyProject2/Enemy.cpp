@@ -70,8 +70,7 @@ void AEnemy::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* ot
 	{
 		if (otherActor->ActorHasTag("Waypoint"))
 		{
-			//FString text = ("Found waypoint: " + otherActor->GetName());
-			//UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+
 		}
 	}
 }
@@ -85,8 +84,7 @@ void AEnemy::OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* othe
 	{
 		if (otherActor->ActorHasTag("Waypoint"))
 		{
-			//FString text = ("Left waypoint: " + otherActor->GetName());
-			//UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+
 		}
 	}
 }
@@ -100,7 +98,11 @@ void AEnemy::decreaseEnemyHealth(float damage_amount)
 		should_timeout = true;
 		EnemyHealth = 0.0f;
 		SetActorEnableCollision(false);
-		//this->Collider->SetGenerateOverlapEvents(false);
 	}
 		
+}
+
+void AEnemy::setRandomIdleTime()
+{
+	idle_time_current = FMath::RandRange(idle_time_min, idle_time_max);
 }

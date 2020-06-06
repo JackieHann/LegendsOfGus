@@ -55,14 +55,29 @@ void AEnemyController::Tick(float deltaTime)
 	// if enemy is alive then move
 	if (enemy->EnemyHealth != 0.0f)
 	{ 
-		// IF player goes out of sight range, stop chasing
+		// If idling then reduce idle time
+		if (enemy->bIsIdling)
+		{
+			enemy->idle_time_current -= deltaTime;
+			// If enemy times out of idle, go back to patrolling
+			if (enemy->idle_time_current < 0.0f)
+			{
+				enemy->bIsIdling = false;
+				enemy->bFollowingWaypoints = true;
+				enemy->NextWaypoint = enemy->NextWaypoint->getRandomNextWaypoint();
+			}
+		}
+		// If player goes out of sight range, stop chasing and go to idle state
 		if (DistanceToPlayer > AISightRadius)
 		{
 			enemy->bIsPlayerDetected = false;
+			enemy->bFollowingPlayer = false;
+			enemy->bIsIdling = true;
+			enemy->setRandomIdleTime();
 			enemy->GetCharacterMovement()->MaxWalkSpeed = enemy->patrolSpeed;
 		}
 		// if player isnt detected, path to waypoint
-		if ((enemy->NextWaypoint != nullptr) && (enemy->bIsPlayerDetected == false))
+		if ((enemy->NextWaypoint != nullptr) && (enemy->bIsPlayerDetected == false) &&(enemy->bIsIdling == false))
 		{
 			enemy->bFollowingWaypoints = true;
 			enemy->GetCharacterMovement()->MaxWalkSpeed = enemy->patrolSpeed;
@@ -73,6 +88,7 @@ void AEnemyController::Tick(float deltaTime)
 		{
 			DistanceToPlayer = GetPawn()->GetDistanceTo(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 			enemy->bFollowingWaypoints = false;
+			enemy->bIsIdling = false;
 			if (DistanceToPlayer < 200.0f)
 			{
 				enemy->bFollowingPlayer = false;
@@ -96,6 +112,7 @@ void AEnemyController::Tick(float deltaTime)
 		enemy->bFollowingPlayer = false;
 		enemy->bFollowingWaypoints = false;
 		enemy->bIsPlayerDetected = false;
+		enemy->bIsIdling = false;
 		MoveToActor(enemy, 1.0f);
 	}
 
