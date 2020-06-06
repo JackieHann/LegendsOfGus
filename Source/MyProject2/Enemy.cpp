@@ -2,7 +2,10 @@
 
 
 #include "Enemy.h"
+#include "Kismet/GameplayStatics.h"
 #include "EnemyController.h"
+#include "Sound/SoundCue.h"
+#include "UObject/ConstructorHelpers.h"
 #include "EnemyWaypoint.h"
 
 
@@ -26,6 +29,11 @@ AEnemy::AEnemy(const FObjectInitializer& ObjectInitializer)
 	// Set enemy controller	
 	AIControllerClass = AEnemyController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::Spawned;
+
+	// Set death sound for enemy
+	hitSound = CreateDefaultSubobject<UAudioComponent>(FName("Enemy Damaged Sound"));
+	static ConstructorHelpers::FObjectFinder<USoundCue> enemyHitSound(TEXT("/Game/Sound/Enemies/Damaged/EnemyHit.EnemyHit"));
+	hitSound->Sound = enemyHitSound.Object;
 }
 
 // Called when the game starts or when spawned
@@ -70,8 +78,7 @@ void AEnemy::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor* ot
 	{
 		if (otherActor->ActorHasTag("Waypoint"))
 		{
-			//FString text = ("Found waypoint: " + otherActor->GetName());
-			//UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+
 		}
 	}
 }
@@ -85,8 +92,7 @@ void AEnemy::OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* othe
 	{
 		if (otherActor->ActorHasTag("Waypoint"))
 		{
-			//FString text = ("Left waypoint: " + otherActor->GetName());
-			//UE_LOG(LogTemp, Warning, TEXT("%s"), *text);
+
 		}
 	}
 }
@@ -94,13 +100,18 @@ void AEnemy::OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* othe
 // Called when the enemy takes damage from the player
 void AEnemy::decreaseEnemyHealth(float damage_amount)
 {
+	hitSound->Play();
 	EnemyHealth -= damage_amount;
 	if (EnemyHealth <= 0.0f)
 	{
 		should_timeout = true;
 		EnemyHealth = 0.0f;
 		SetActorEnableCollision(false);
-		//this->Collider->SetGenerateOverlapEvents(false);
 	}
 		
+}
+
+void AEnemy::setRandomIdleTime()
+{
+	idle_time_current = FMath::RandRange(idle_time_min, idle_time_max);
 }

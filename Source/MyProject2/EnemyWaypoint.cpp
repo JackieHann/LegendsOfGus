@@ -42,9 +42,11 @@ void AEnemyWaypoint::OnEnemyEnter(UPrimitiveComponent* overlappedComponent, AAct
 	if (otherActor != nullptr)
 	{
 		enemy = Cast<AEnemy>(otherActor);
-		if (enemy != nullptr)
+		if (enemy != nullptr && (enemy->bFollowingPlayer == false))
 		{
-			enemy->NextWaypoint = getRandomNextWaypoint();
+			enemy->bFollowingWaypoints = false;
+			enemy->bIsIdling = true;
+			enemy->setRandomIdleTime();
 		}
 	}
 }
