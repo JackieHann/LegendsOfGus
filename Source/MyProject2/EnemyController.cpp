@@ -89,7 +89,7 @@ void AEnemyController::Tick(float deltaTime)
 			DistanceToPlayer = GetPawn()->GetDistanceTo(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 			enemy->bFollowingWaypoints = false;
 			enemy->bIsIdling = false;
-			if (DistanceToPlayer < 200.0f)
+			if (DistanceToPlayer < 100.0f)
 			{
 				enemy->bFollowingPlayer = false;
 				enemy->bAttackingPlayer = true;

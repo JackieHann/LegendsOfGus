@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/AudioComponent.h"
 #include "RoomActor.h"
 #include "Enemy.generated.h"
 
@@ -60,6 +61,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bIsIdling = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UAudioComponent* hitSound;
 
 protected:
 	// Called when the game starts or when spawned

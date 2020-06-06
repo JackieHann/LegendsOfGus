@@ -2,7 +2,10 @@
 
 
 #include "Enemy.h"
+#include "Kismet/GameplayStatics.h"
 #include "EnemyController.h"
+#include "Sound/SoundCue.h"
+#include "UObject/ConstructorHelpers.h"
 #include "EnemyWaypoint.h"
 
 
@@ -26,6 +29,11 @@ AEnemy::AEnemy(const FObjectInitializer& ObjectInitializer)
 	// Set enemy controller	
 	AIControllerClass = AEnemyController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::Spawned;
+
+	// Set death sound for enemy
+	hitSound = CreateDefaultSubobject<UAudioComponent>(FName("Enemy Damaged Sound"));
+	static ConstructorHelpers::FObjectFinder<USoundCue> enemyHitSound(TEXT("/Game/Sound/Enemies/Damaged/EnemyHit.EnemyHit"));
+	hitSound->Sound = enemyHitSound.Object;
 }
 
 // Called when the game starts or when spawned
@@ -92,6 +100,7 @@ void AEnemy::OnOverlapEnd(UPrimitiveComponent* overlappedComponent, AActor* othe
 // Called when the enemy takes damage from the player
 void AEnemy::decreaseEnemyHealth(float damage_amount)
 {
+	hitSound->Play();
 	EnemyHealth -= damage_amount;
 	if (EnemyHealth <= 0.0f)
 	{
