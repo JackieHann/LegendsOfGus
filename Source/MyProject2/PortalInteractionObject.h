@@ -15,6 +15,9 @@ class MYPROJECT2_API APortalInteractionObject : public AManualLootObject
 	GENERATED_BODY()
 	
 public:
+
+	APortalInteractionObject();
+
 	virtual void Interact(ABaseController* controller) override;
 
 	// Called every frame
@@ -22,7 +25,7 @@ public:
 	virtual FString GetInteractText() override;
 
 private:
-	APortalInteractionObject();
+	
 
 	UPROPERTY(EditDefaultsOnly)
 	FVector Target_World_Position;

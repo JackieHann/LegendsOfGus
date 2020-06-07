@@ -13,6 +13,8 @@ ACombatCharacter::ACombatCharacter()
 
 	player_current_health = player_max_health;
 	m_current_keys = 0;
+	has_won = false;
+	should_update_score = false;
 }
 
 
@@ -34,7 +36,6 @@ void ACombatCharacter::DecrementPlayerLootCount(int rarity)
 {
 	if (GetPlayerLootCount(rarity) > 0)
 		m_player_loot_info.loot_count[(LootRarity)rarity]--;
-
 }
 
 
@@ -171,36 +172,53 @@ float ACombatCharacter::GetDifficultyModifier()
 
 void ACombatCharacter::UpdateTotalScore()
 {
+	int score_to_add = 0;
 	if (m_player_loot_info.loot_count[LR_COMMON] > 0)
 	{
-		m_total_score += 1;
+		score_to_add = 1;
 		m_player_loot_info.loot_count[LR_COMMON]--;
 	}
 	else if (m_player_loot_info.loot_count[LR_UNCOMMON] > 0)
 	{
-		m_total_score += 3;
+		score_to_add = 3;
 		m_player_loot_info.loot_count[LR_UNCOMMON]--;
 	}
 	else if (m_player_loot_info.loot_count[LR_RARE] > 0)
 	{
-		m_total_score += 7;
+		score_to_add = 7;
 		m_player_loot_info.loot_count[LR_RARE]--;
 	}
 	else if (m_player_loot_info.loot_count[LR_EPIC] > 0)
 	{
-		m_total_score += 15;
+		score_to_add = 15;
 		m_player_loot_info.loot_count[LR_EPIC]--;
 	}
 
 	else if (m_player_loot_info.loot_count[LR_LEGENDARY] > 0)
 	{
-		m_total_score += 25;
+		score_to_add = 25;
 		m_player_loot_info.loot_count[LR_LEGENDARY]--;
 	}
+
+	if (this->has_won) score_to_add *= 2;
+	m_total_score += score_to_add;
+
 }
 
 int ACombatCharacter::GetTotalScore()
 {
 	return this->m_total_score;
+}
+
+FString ACombatCharacter::GetStateAsText()
+{
+	return (this->has_won ? TEXT("ESCAPED") : TEXT("GAME OVER"));
+}
+
+void ACombatCharacter::SetWon()
+{
+	OnPlayerWin();
+	should_update_score = true;
+	this->has_won = true;
 }
 

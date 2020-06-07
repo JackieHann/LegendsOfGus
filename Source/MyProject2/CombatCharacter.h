@@ -64,6 +64,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 	void OnPlayerDeath();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+	void OnPlayerWin();
+
 	//UFUNCTION(BlueprintCallable)
 	//void GetPlayer;
 
@@ -95,7 +98,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetTotalScore();
 
+	UFUNCTION(BlueprintCallable)
+	FString GetStateAsText();
+
+	void SetWon();
+
 private:
+
+	bool has_won = false;
 
 	float timer = 0.0f;
 	bool should_update_score = false;
