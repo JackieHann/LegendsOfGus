@@ -6,6 +6,8 @@
 #include "Engine.h"
 #include "CombatCharacter.h"
 
+//Interactable that contains a randomized gear variant
+
 AGearLootObject::AGearLootObject()
 {
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root Scene Component"));

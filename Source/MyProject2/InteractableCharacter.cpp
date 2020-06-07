@@ -37,6 +37,7 @@ void AInteractableCharacter::Interact()
 	ABaseController* IController = Cast<ABaseController>(GetController());
 	if (IController && IController->HasTargetInteractable())
 	{
+		//Multiple Interactable types were tried, this setup seemed to work the best for catching each
 		ABasicLootObject* interactable = Cast<ABasicLootObject>(IController->GetTargetInteractable());
 		if (interactable)
 		{

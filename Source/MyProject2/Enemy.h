@@ -30,7 +30,7 @@ public:
 	ARoomActor* SpawnRoom;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	float EnemyHealth = 20.0f;
+	float EnemyHealth = 25.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float EnemyDamage = 5.0f;
