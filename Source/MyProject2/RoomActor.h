@@ -18,6 +18,7 @@ class MYPROJECT2_API ARoomActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ARoomActor();
+	ARoomActor(FString file_name);
 
 	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* EnterTrigger;

@@ -22,9 +22,10 @@ public:
 
 	void CreateLevel(const int seed);
 
-	void SpawnBlueprintActor(std::string file_path, FVector world_pos, FRotator world_rot);
-	void SpawnRoomActor(std::string file_path, FVector world_pos, FRotator world_rot, int room_size);
+	void SpawnRoomActor(std::string file_path, FVector world_pos, FRotator world_rot, int room_size, UObject* obj);
 	
+	UObject* GetObjectFromFile(FString file_path, FString object_name);
+
 	void _CreateRoomsFromMap(Map map);
 
 private:

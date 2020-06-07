@@ -4,10 +4,15 @@
 #include "RoomActor.h"
 #include "EnemySpawner.h"
 #include "Enemy.h"
+#include "GameManager.h"
 
 // Sets default values
 ARoomActor::ARoomActor()
 {
+
+
+
+
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bRoomEntered = false;
@@ -24,6 +29,30 @@ ARoomActor::ARoomActor()
 	EnterTrigger->OnComponentBeginOverlap.AddDynamic(this, &ARoomActor::OnOverlapBegin);
 
 }
+
+ARoomActor::ARoomActor(FString filepath)
+{
+
+
+
+
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+	bRoomEntered = false;
+
+	// Add new root component
+	RootComponent = CreateDefaultSubobject<USceneComponent>(FName("Room"));
+	// Create box collider component - for detecting if player is within room bounds
+	EnterTrigger = CreateDefaultSubobject<UBoxComponent>(FName("Collider"));
+	// Attach box collider to root component
+	EnterTrigger->AttachTo(RootComponent);
+	// Allow room trigger to generate overlap events
+	EnterTrigger->SetGenerateOverlapEvents(true);
+	// Add overlap event to collider
+	EnterTrigger->OnComponentBeginOverlap.AddDynamic(this, &ARoomActor::OnOverlapBegin);
+
+}
+
 
 // Called when the game starts or when spawned
 void ARoomActor::BeginPlay()
@@ -94,11 +123,20 @@ void ARoomActor::OnOverlapBegin(UPrimitiveComponent* overlappedComponent, AActor
 					// Get spawner rotation so enemy faces correct direction - cant tell with cube!
 					FRotator spawn_rot = spawner->GetActorRotation();
 					// Spawn an enemy at the spawners locationS
-					const char* melee_enemy_file_path = "Blueprint'/Game/Blueprints/Enemies/Enemy_BP.Enemy_BP'";
-					UObject* blueprint = Cast<UObject>(StaticLoadObject(UObject::StaticClass(), NULL, ANSI_TO_TCHAR(melee_enemy_file_path)));
-					ACharacter* spawned_character = GetWorld()->SpawnActor<ACharacter>((Cast<UBlueprint>(blueprint))->GeneratedClass, spawn_pos, spawn_rot);
-					AEnemy* spawned_enemy = Cast<AEnemy>(spawned_character);
-					spawned_enemy->SpawnRoom = this;
+					//const char* melee_enemy_file_path = "Blueprint'/Game/Blueprints/Enemies/Enemy_BP.Enemy_BP'";
+					//UObject* blueprint = Cast<UObject>(StaticLoadObject(UObject::StaticClass(), NULL, ANSI_TO_TCHAR(melee_enemy_file_path)));
+					
+					UObject* enemy_obj = GetLevelManager()->GetObjectFromFile("/Game/Blueprints/Enemies", "Enemy_BP");
+					if (enemy_obj)
+					{
+						UClass* enemy_class = Cast<UClass>(enemy_obj);
+						if (enemy_class == NULL)
+							return;
+
+						ACharacter* spawned_character = GetWorld()->SpawnActor<ACharacter>(enemy_class, spawn_pos, spawn_rot);
+						AEnemy* spawned_enemy = Cast<AEnemy>(spawned_character);
+						spawned_enemy->SpawnRoom = this;
+					}
 				}
 			}
 		}	

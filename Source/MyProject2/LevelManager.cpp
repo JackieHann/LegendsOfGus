@@ -2,6 +2,8 @@
 
 
 #include "LevelManager.h"
+#include "UObject/ConstructorHelpers.h"
+#include "EngineUtils.h"
 
 LevelManager::LevelManager()
 {
@@ -16,57 +18,49 @@ void LevelManager::LM_DoSomething()
 {
 }
 
-void LevelManager::SpawnBlueprintActor(std::string file_path, FVector world_pos, FRotator world_rot)
+UObject* LevelManager::GetObjectFromFile(FString file_path, FString object_name)
 {
-	char buffer[100];
-	const char* root_dir = "Blueprint'/Game/Blueprints/";
-	strcpy(buffer, root_dir);
-	strcat(buffer, file_path.c_str());
+	//Blueprint class name / identifier uses _C Suffix
+	FString class_name(object_name);
+	class_name.Append("_C");
 
-	UObject* SpawnActor = Cast<UObject>(StaticLoadObject(UObject::StaticClass(), NULL, ANSI_TO_TCHAR(buffer)));
+	const FString room_directory = file_path;
 
-	UBlueprint* GeneratedBP = Cast<UBlueprint>(SpawnActor);
-	if (!SpawnActor)
+	//Looks through room directory and pulls out objects with blueprint name
+	TArray<UObject*> tempArray;
+	if (EngineUtils::FindOrLoadAssetsByPath(room_directory, tempArray, EngineUtils::ATL_Class))
 	{
-		return;
+		for (int i = 0; i < tempArray.Num(); ++i)
+		{
+			UObject* temp = tempArray[i];
+			if (temp != NULL && temp->GetName().Compare(class_name) == 0)
+			{
+				return temp;
+			}
+		}
 	}
 
-	UClass* SpawnClass = SpawnActor->StaticClass();
-	if (SpawnClass == NULL)
-	{
-		return;
-	}
+	return NULL;
 
-	UWorld* World = GWorld;
-	AActor* spawnedActor = World->SpawnActor<AActor>(GeneratedBP->GeneratedClass, world_pos, world_rot);
 }
 
-void LevelManager::SpawnRoomActor(std::string file_path, FVector world_pos, FRotator world_rot, int room_size)
+void LevelManager::SpawnRoomActor(std::string blueprint_name, FVector world_pos, FRotator world_rot, int room_size, UObject* obj)
 {
-	char buffer[100];
-	const char* root_directory = "Blueprint'/Game/Blueprints/";
-	strcpy(buffer, root_directory);
-	strcat(buffer, file_path.c_str());
+	UObject* RoomObject = this->GetObjectFromFile("/Game/Blueprints/Rooms", blueprint_name.c_str());
+	if (RoomObject)
+	{
+		UClass* RoomClass = Cast<UClass>(RoomObject);
+		if (RoomClass == NULL)
+			return;
 
-	// Load room using file path
-	UObject* RoomObject = Cast<UObject>(StaticLoadObject(UObject::StaticClass(), NULL, ANSI_TO_TCHAR(buffer)));
-
-	// Cast loaded room to blueprint class
-	UBlueprint* RoomBlueprint = Cast<UBlueprint>(RoomObject);
-	// break if object cannot be converted
-	if (!RoomBlueprint)
-		return;
-	// Get class data of loaded blueprint
-	UClass* RoomClass = RoomBlueprint->StaticClass();
-	// break if class data not found
-	if (RoomClass == NULL)
-		return;
-	// Create the actor to spawn in the level
-	UWorld* World = GWorld;
-	ARoomActor* RoomActor = World->SpawnActor<ARoomActor>(RoomBlueprint->GeneratedClass, world_pos, world_rot);
+		// Create the actor to spawn in the level
+		UWorld* World = GWorld;
+		ARoomActor* RoomActor = World->SpawnActor<ARoomActor>(RoomClass, world_pos, world_rot);
+		// Initialise the room - set box collider values
+		if(RoomActor) RoomActor->InitializeRoom(room_size);
+	}
 	
-	// Initialise the room - set box collider values
-	RoomActor->InitializeRoom(room_size);
+	
 }
 
 void LevelManager::CreateLevel(const int seed)
@@ -80,7 +74,7 @@ void LevelManager::_CreateLevel(const int seed)
 	Map new_map({ MAP_DIMENSIONS_X, MAP_DIMENSIONS_Y });
 
 	// generate all the rooms to be added
-	new_map.GenerateFromRoomData(1);
+	new_map.GenerateFromRoomData(seed);
 	new_map.ConnectCorridors();
 
 	// add all rooms to the level
@@ -102,7 +96,7 @@ void LevelManager::_CreateRoom(Room& room)
 	float yScaled = y * cell_to_unreal_size;
 	float offset = ((float)room_size / 2.f) * cell_to_unreal_size;
 
-	SpawnRoomActor(room.m_file_path, { xScaled + offset, yScaled + offset, 0 }, FRotator(0, 90*(int)room.m_rot, 0), room_size);
+	SpawnRoomActor(room.m_file_path, { xScaled + offset, yScaled + offset, 0 }, FRotator(0, 90*(int)room.m_rot, 0), room_size, room.m_object_ref);
 }
 
 void LevelManager::_CreateRoomsFromMap(Map map)
